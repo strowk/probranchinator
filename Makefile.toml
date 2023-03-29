@@ -1,0 +1,6 @@
+[tasks.windows_package]
+command = "cp"
+args = [
+    "./target/release/probranchinator.exe",
+    "./choco/tools/probranchinator.exe",
+]
