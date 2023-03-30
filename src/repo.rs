@@ -32,44 +32,44 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
         })?
     } else {
         // Otherwise, clone the repository to the new folder
-        // Repository::clone(remote_url, &tmp_path).with_context(|| {
-        //     format!(
-        //         "Failed to clone repository from {:?} to {:?}",
-        //         remote_url,
-        //         tmp_path.display()
-        //     )
-        // })?
-
-        // Using more complex clone options to allow for SSH authentication
-        // It is broken at the moment on Windows, see
-        // https://github.com/rust-lang/git2-rs/issues/937
-
-        let mut callbacks = RemoteCallbacks::new();
-        callbacks.credentials(|_url, username_from_url, _allowed_types| {
-            Cred::ssh_key(
-                username_from_url.unwrap(),
-                None,
-                Path::new(&format!("{}/.ssh/id_rsa", env::var("HOME").unwrap())),
-                None,
-            )
-        });
-
-        // Prepare fetch options.
-        let mut fo = git2::FetchOptions::new();
-        fo.remote_callbacks(callbacks);
-
-        // Prepare builder.
-        let mut builder = git2::build::RepoBuilder::new();
-        builder.fetch_options(fo);
-
-        // Clone the project.
-        builder.clone(remote_url, &tmp_path).with_context(|| {
+        Repository::clone(remote_url, &tmp_path).with_context(|| {
             format!(
                 "Failed to clone repository from {:?} to {:?}",
                 remote_url,
                 tmp_path.display()
             )
         })?
+
+        // Using more complex clone options to allow for SSH authentication
+        // It is broken at the moment on Windows, see
+        // https://github.com/rust-lang/git2-rs/issues/937
+
+        // let mut callbacks = RemoteCallbacks::new();
+        // callbacks.credentials(|_url, username_from_url, _allowed_types| {
+        //     Cred::ssh_key(
+        //         username_from_url.unwrap(),
+        //         None,
+        //         Path::new(&format!("{}/.ssh/id_rsa", env::var("HOME").unwrap())),
+        //         None,
+        //     )
+        // });
+
+        // // Prepare fetch options.
+        // let mut fo = git2::FetchOptions::new();
+        // fo.remote_callbacks(callbacks);
+
+        // // Prepare builder.
+        // let mut builder = git2::build::RepoBuilder::new();
+        // builder.fetch_options(fo);
+
+        // // Clone the project.
+        // builder.clone(remote_url, &tmp_path).with_context(|| {
+        //     format!(
+        //         "Failed to clone repository from {:?} to {:?}",
+        //         remote_url,
+        //         tmp_path.display()
+        //     )
+        // })?
     };
 
     if have_cached_repo {
