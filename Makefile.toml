@@ -1,6 +1,27 @@
 [tasks.windows_package]
+dependencies = ["windows_copy_for_package"]
+cwd = "./choco"
+command = "choco"
+args = ["pack"]
+
+[tasks.windows_copy_for_package]
 command = "cp"
 args = [
     "./target/release/probranchinator.exe",
     "./choco/tools/probranchinator.exe",
 ]
+
+[tasks.windows_install]
+cwd = "./choco"
+command = "choco"
+args = ["install", "probranchinator", "--pre", "--force", "--source", "."]
+
+[tasks.build_release]
+command = "cargo"
+args = ["build", "--release"]
+
+[tasks.windows_build_install]
+dependencies = ["build_release", "windows_package", "windows_install"]
+
+[tasks.windows_package_install]
+dependencies = ["windows_package", "windows_install"]
