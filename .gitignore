@@ -7,7 +7,3 @@
 
 # This is where a quick test is run during development
 /testrepo
-
-# Chocolatey files
-/choco/tools/probranchinator.exe
-/choco/**.nupkg
