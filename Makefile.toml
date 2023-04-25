@@ -83,7 +83,7 @@ args = [
 ]
 
 [tasks.build-mac_arm]
-# dependencies = [ "cross-image-mac_arm" ]
+dependencies = [ "cross-image-mac_arm" ]
 command = "cross"
 args = [
     "build",
