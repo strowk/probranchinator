@@ -4,13 +4,11 @@ description = "A tool to help you analyse conflicts in git branches"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-git2 = { version = "0.16.1", features = ["ssh"] }
+git2 = { version = "0.16.1", default-features = false }
 tui = "0.19"
 crossterm = "0.25"
 tempfile = "3.5.0"
 anyhow = "1.0.70"
 clap = { version = "4.2.0", features = ["derive"] }
-ssh2 = "0.9.3"
+fehler = "1.0.0"

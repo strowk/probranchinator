@@ -3,6 +3,7 @@ mod analysis;
 mod app;
 use std::error::Error;
 mod repo;
+mod clone;
 use crate::repo::get_repo;
 
 /// Terminal tool to analyse conflicts between branches in a git repository

@@ -1,27 +1,117 @@
-[tasks.windows_package]
-dependencies = ["windows_copy_for_package"]
-cwd = "./choco"
-command = "choco"
-args = ["pack"]
-
-[tasks.windows_copy_for_package]
-command = "cp"
+[tasks.install]
+command = "cargo"
 args = [
-    "./target/release/probranchinator.exe",
-    "./choco/tools/probranchinator.exe",
+    "install",
+    "--path",
+    "./"
 ]
 
-[tasks.windows_install]
-cwd = "./choco"
-command = "choco"
-args = ["install", "probranchinator", "--pre", "--force", "--source", "."]
 
-[tasks.build_release]
+# Cross builds for linux, windows and mac
+
+[tasks.install-cross]
 command = "cargo"
-args = ["build", "--release"]
+args = [
+    "install",
+    "cross",
+    "--git",
+    "https://github.com/cross-rs/cross"
+]
 
-[tasks.windows_build_install]
-dependencies = ["build_release", "windows_package", "windows_install"]
+[tasks.build-all]
+dependencies = [
+    "build-linux_x86_64",
+    "build-windows_x86_64",
+    "build-mac_arm",
+    "build-mac_x86_64"
+]
 
-[tasks.windows_package_install]
-dependencies = ["windows_package", "windows_install"]
+# Building binary for linux x86_64
+[tasks.build-linux_x86_64]
+command = "cross"
+args = [
+    "build",
+    "--target",
+    "x86_64-unknown-linux-gnu",
+    "--release"
+]
+
+# Building binary for windows x86_64
+
+[tasks.build-windows_x86_64]
+command = "cross"
+args = [
+    "build",
+    "--target",
+    "x86_64-pc-windows-gnu",
+    "--release"
+]
+
+# Building binaries for MacOS
+
+[tasks.clone-cross]
+condition = { files_not_exist = ["${CARGO_MAKE_WORKING_DIRECTORY}/cross"] }
+command = "git"
+args = [
+    "clone",
+    "https://github.com/cross-rs/cross"
+]
+
+[tasks.get-cross-toolchains]
+dependencies = [ "clone-cross" ]
+condition = { files_not_exist = ["${CARGO_MAKE_WORKING_DIRECTORY}/cross/docker/cross-toolchains"] }
+command = "git"
+cwd = "./cross"
+args = [
+    "submodule",
+    "update",
+    "--init",
+    "--remote"
+]
+
+[tasks.cross-image-mac_arm]
+dependencies = [ "get-cross-toolchains" ]
+command = "cargo"
+cwd = "./cross"
+args = [
+    "build-docker-image",
+    "aarch64-apple-darwin-cross",
+    "--tag",
+    "local",
+    "--build-arg",
+    "MACOS_SDK_URL=https://storage.googleapis.com/ory.sh/build-assets/MacOSX11.3.sdk.tar.xz",
+]
+
+[tasks.build-mac_arm]
+# dependencies = [ "cross-image-mac_arm" ]
+command = "cross"
+args = [
+    "build",
+    "--target",
+    "aarch64-apple-darwin",
+    "--release"
+]
+
+[tasks.cross-image-mac_x86_64]
+dependencies = [ "get-cross-toolchains" ]
+command = "cargo"
+cwd = "./cross"
+args = [
+    "build-docker-image",
+    "x86_64-apple-darwin-cross",
+    "--tag",
+    "local",
+    "--build-arg",
+    "MACOS_SDK_URL=https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz",
+]
+
+[tasks.build-mac_x86_64]
+dependencies = [ "cross-image-mac_x86_64" ]
+command = "cross"
+args = [
+    "build",
+    "--target",
+    "x86_64-apple-darwin",
+    "--release"
+]
+
