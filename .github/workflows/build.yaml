@@ -1,0 +1,13 @@
+on:
+  release:
+    types: [created]
+  push:
+
+jobs:
+  release:
+    name: release ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: cargo install --force cargo-make
+      - run: cargo make cross
