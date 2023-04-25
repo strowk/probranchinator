@@ -1,7 +1,7 @@
 on:
-  release:
-    types: [created]
   push:
+  # release:
+  #   types: [created]
 
 jobs:
   release:
@@ -10,4 +10,5 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: cargo install --force cargo-make
-      - run: cargo make cross
+      - run: cargo make install-cross
+      - run: cargo make build-all
