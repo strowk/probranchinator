@@ -6,7 +6,6 @@ args = [
     "./"
 ]
 
-
 # Cross builds for linux, windows and mac
 
 [tasks.install-cross]
