@@ -68,8 +68,20 @@ args = [
     "--remote"
 ]
 
+[tasks.create-docker-engine]
+ignore_errors = true
+command = "docker"
+args = [
+    "buildx",
+    "create",
+    "--use",
+    "--name",
+    "docker-container",
+    "--driver=docker-container"
+]
+
 [tasks.cross-image-mac_arm]
-dependencies = [ "get-cross-toolchains" ]
+dependencies = [ "get-cross-toolchains", "create-docker-engine" ]
 command = "cargo"
 cwd = "./cross"
 args = [
@@ -96,7 +108,7 @@ args = [
 ]
 
 [tasks.cross-image-mac_x86_64]
-dependencies = [ "get-cross-toolchains" ]
+dependencies = [ "get-cross-toolchains", "create-docker-engine" ]
 command = "cargo"
 cwd = "./cross"
 args = [
