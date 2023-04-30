@@ -12,6 +12,7 @@ pub(crate) fn clone_repo(repo_url: &str, dst: &PathBuf) {
     cmd.arg(dst);
     let child = cmd.spawn()?;
     let output = child.wait_with_output()?;
+    
     if !output.status.success() {
         anyhow::bail!("Failed to clone repository");
     }
