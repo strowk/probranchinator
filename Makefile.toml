@@ -1,3 +1,7 @@
+[env]
+CACHE_TO = { value = "type=local,dest=../../docker-cache", condition = { env_not_set = ["CACHE_TO"] } }
+CACHE_FROM = { value = "type=local,src=../../docker-cache", condition = { env_not_set = ["CACHE_FROM"] } }
+
 [tasks.install]
 command = "cargo"
 args = [
@@ -92,9 +96,9 @@ args = [
     "--build-arg",
     "MACOS_SDK_URL=https://storage.googleapis.com/ory.sh/build-assets/MacOSX11.3.sdk.tar.xz",
     "--cache-to",
-    "type=local,dest=../../docker-cache",
+    "${CACHE_TO}",
     "--cache-from",
-    "type=local,src=../../docker-cache",
+    "${CACHE_FROM}",
 ]
 
 [tasks.build-mac_arm]
@@ -119,9 +123,9 @@ args = [
     "--build-arg",
     "MACOS_SDK_URL=https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz",
     "--cache-to",
-    "type=local,dest=../../docker-cache",
+    "${CACHE_TO}",
     "--cache-from",
-    "type=local,src=../../docker-cache",
+    "${CACHE_FROM}",
 ]
 
 [tasks.build-mac_x86_64]
