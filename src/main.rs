@@ -19,7 +19,6 @@ struct Args {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
-
     let repo = get_repo(args.remote.as_str())?;
     return app::run_app(repo);
 }
