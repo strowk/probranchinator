@@ -1,8 +1,7 @@
 use anyhow::{Context, Result};
-use git2::{Cred, RemoteCallbacks, Repository};
+use git2::Repository;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
-use std::path::Path;
 use std::{env, fs};
 
 use crate::clone::clone_repo;
