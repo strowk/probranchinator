@@ -6,7 +6,7 @@ on:
 jobs:
   release:
     env:
-      CACHE_TO: type=gha
+      CACHE_TO: type=gha,mode=max
       CACHE_FROM: type=gha
     name: release ${{ matrix.target }}
     runs-on: ubuntu-latest
