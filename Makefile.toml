@@ -62,8 +62,8 @@ args = [
 
 [tasks.get-cross-toolchains]
 dependencies = [ "clone-cross" ]
-condition = { files_not_exist = ["${CARGO_MAKE_WORKING_DIRECTORY}/cross/docker/cross-toolchains"] }
 command = "git"
+condition = { files_not_exist = ["${CARGO_MAKE_WORKING_DIRECTORY}/docker/cross-toolchains"] }
 cwd = "./cross"
 args = [
     "submodule",
