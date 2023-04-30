@@ -99,6 +99,12 @@ args = [
     "${CACHE_TO}",
     "--cache-from",
     "${CACHE_FROM}",
+    # Overriding git reference supplied by Github
+    # to avoid unnecessary struggle with name of docker image
+    "--ref-type",
+    "branch",
+    "--ref-name",
+    "main"
 ]
 
 [tasks.build-mac_arm]
@@ -126,6 +132,12 @@ args = [
     "${CACHE_TO}",
     "--cache-from",
     "${CACHE_FROM}",
+    # Overriding git reference supplied by Github
+    # to avoid unnecessary struggle with name of docker image
+    "--ref-type",
+    "branch",
+    "--ref-name",
+    "main"
 ]
 
 [tasks.build-mac_x86_64]
