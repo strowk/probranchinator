@@ -22,33 +22,9 @@ struct App {
 
 impl App {
     fn new(answer: Vec<Vec<String>>) -> App {
-        // .iter()
-        // .map(|x| x.iter().map(|y| y).collect())
-        // .collect();
         App {
             state: TableState::default(),
             items: answer,
-            // items: vec![
-            // vec!["Row11", "Row12", "Row13"],
-            // vec!["Row21", "Row22", "Row23"],
-            // vec!["Row31", "Row32", "Row33"],
-            // vec!["Row41", "Row42", "Row43"],
-            // vec!["Row51", "Row52", "Row53"],
-            // vec!["Row61", "Row62\nTest", "Row63"],
-            // vec!["Row71", "Row72", "Row73"],
-            // vec!["Row81", "Row82", "Row83"],
-            // vec!["Row91", "Row92", "Row93"],
-            // vec!["Row101", "Row102", "Row103"],
-            // vec!["Row111", "Row112", "Row113"],
-            // vec!["Row121", "Row122", "Row123"],
-            // vec!["Row131", "Row132", "Row133"],
-            // vec!["Row141", "Row142", "Row143"],
-            // vec!["Row151", "Row152", "Row153"],
-            // vec!["Row161", "Row162", "Row163"],
-            // vec!["Row171", "Row172", "Row173"],
-            // vec!["Row181", "Row182", "Row183"],
-            // vec!["Row191", "Row192", "Row193"],
-            // ],
         }
     }
     pub fn next(&mut self) {
@@ -95,7 +71,7 @@ pub(crate) fn run_app(repo: Repository) -> Result<(), Box<dyn Error>> {
         println!("");
     });
     println!("analysis done!");
-    // branches::run();
+
     // setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -182,13 +158,9 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 .title("Merge Analysis"),
         )
         .highlight_style(selected_style)
-        // .highlight_symbol(">> ")
-        // .widths(&[]);
         .widths(&[
             Constraint::Length(60),
             Constraint::Percentage(50),
-            // Constraint::Ratio(1, 3),
-            // Constraint::Min(10),
         ]);
     f.render_stateful_widget(t, rects[0], &mut app.state);
 }
