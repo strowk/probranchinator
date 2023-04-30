@@ -53,7 +53,7 @@ condition = { files_not_exist = ["${CARGO_MAKE_WORKING_DIRECTORY}/cross"] }
 command = "git"
 args = [
     "clone",
-    "https://github.com/cross-rs/cross"
+    "https://github.com/strowk/cross.git"
 ]
 
 [tasks.get-cross-toolchains]
@@ -79,6 +79,10 @@ args = [
     "local",
     "--build-arg",
     "MACOS_SDK_URL=https://storage.googleapis.com/ory.sh/build-assets/MacOSX11.3.sdk.tar.xz",
+    "--cache-to",
+    "type=local,dest=../../docker-cache",
+    "--cache-from",
+    "type=local,src=../../docker-cache",
 ]
 
 [tasks.build-mac_arm]
@@ -102,6 +106,10 @@ args = [
     "local",
     "--build-arg",
     "MACOS_SDK_URL=https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz",
+    "--cache-to",
+    "type=local,dest=../../docker-cache",
+    "--cache-from",
+    "type=local,src=../../docker-cache",
 ]
 
 [tasks.build-mac_x86_64]

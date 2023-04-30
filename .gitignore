@@ -10,3 +10,5 @@
 
 # For building cross-compiled binaries
 /cross
+
+/docker-cache
