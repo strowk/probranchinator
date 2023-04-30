@@ -2,8 +2,8 @@
 name = "probranchinator"
 description = "A tool to help you analyse conflicts in git branches"
 version = "0.1.0"
-license-file = "LICENSE"
-repository  = "https://github.com/strowk/probranchinator/"
+license = "MIT"
+repository = "https://github.com/strowk/probranchinator/"
 edition = "2021"
 
 [dependencies]
