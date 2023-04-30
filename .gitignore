@@ -7,3 +7,6 @@
 
 # This is where a quick test is run during development
 /testrepo
+
+# For building cross-compiled binaries
+/cross
