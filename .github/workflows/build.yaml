@@ -20,6 +20,8 @@ jobs:
             ./target
             ~/.cargo
             ./cross
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v2
       - run: cargo install cargo-make
       - run: cargo make install-cross
       - run: cargo make build-all
