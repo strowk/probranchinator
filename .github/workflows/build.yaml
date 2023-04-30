@@ -4,11 +4,8 @@ on:
   #   types: [created]
 
 jobs:
-  release:
-    env:
-      CACHE_TO: type=gha,mode=max
-      CACHE_FROM: type=gha
-    name: release ${{ matrix.target }}
+  build:
+    name: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -24,7 +21,16 @@ jobs:
         uses: crazy-max/ghaction-github-runtime@v2
       - run: cargo install cargo-make
       - run: cargo make install-cross
-      - run: cargo make build-all
+      - run: cargo make build-linux_x86_64
+      - run: cargo make build-windows_x86_64
+      - run: cargo make build-mac_x86_64
+        env:
+          CACHE_TO: type=gha,mode=max,scope=mac_x86_64
+          CACHE_FROM: type=gha,scope=mac_x86_64
+      - run: cargo make build-mac_arm
+        env:
+          CACHE_TO: type=gha,mode=max,scope=mac_arm
+          CACHE_FROM: type=gha,scope=mac_arm
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
