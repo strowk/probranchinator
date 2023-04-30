@@ -14,7 +14,7 @@ jobs:
         with:
           key: cargo
           path: |
-            **/target
+            ./target
             ~/.cargo
             ./cross
       - run: cargo install cargo-make
