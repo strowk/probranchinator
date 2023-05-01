@@ -3,7 +3,9 @@
 All notable changes to this project will be documented in this file. 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+<!-- next-header -->
+
+## [Unreleased] - ReleaseDate
 
 ### Added
 
@@ -31,3 +33,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - Found conflicts, cannot resolve automatically.
   - Found conflicts, can resolve automatically.
 - Output is given in terminal application as a table.
+
+<!-- next-url -->
+[Unreleased]: https://github.com/strowk/probranchinator/compare/v0.1.0...HEAD
+[v0.1.0]: https://github.com/strowk/probranchinator/releases/tag/v0.1.0
