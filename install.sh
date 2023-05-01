@@ -26,6 +26,13 @@ echo "architecture is $ARCH"
 BUILD="${ARCH}-${THESYSTEMIS}"
 DOWNLOAD_URL="$(curl https://api.github.com/repos/strowk/probranchinator/releases/latest | grep browser_download_url | grep ${BUILD} | cut -d '"' -f 4 )"
 
+if [[ -z "$DOWNLOAD_URL" ]]; then
+    echo "No prebuilt binary found for $BUILD"
+    echo "You might need to build from source"
+    echo "Refer to README in https://github.com/strowk/probranchinator for more information"
+    exit 1
+fi
+
 echo "Downloading from $DOWNLOAD_URL"
 curl "$DOWNLOAD_URL" -Lo ./probranchinator-archive.tgz
 mkdir -p ./probranchinator-install
