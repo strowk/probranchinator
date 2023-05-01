@@ -35,7 +35,7 @@ cargo install probranchinator
 ## Usage
 
 ```bash
-probranchinator --remote=<remote_url>
+probranchinator.exe [OPTIONS] --remote <REMOTE> [BRANCHES]...
 ```
 
 Example:
@@ -44,13 +44,28 @@ Example:
 probranchinator --remote=https://github.com/strowk/probranchinator
 ```
 
+Change remote to something else, as probranchinator itself does not have many branches ATM.
+
 If you want to examine your local repository, you can use `file://` protocol:
 
 ```bash
 probranchinator --remote=file://$PWD
 ```
 
-To exit the program, press `q`.
+By default `probranchinator` will analyse 10 most recently updated branches.
+You can override that by passing branches to analyse as CLI arguments:
+
+```bash
+probranchinator --remote=https://gitlab.com/git-compose/git-compose.git master test-branch-2
+```
+
+or by changing the amount of recent branches to analyse:
+
+```bash
+probranchinator --remote=https://gitlab.com/git-compose/git-compose.git --recent=2
+```
+
+To exit the program, press `q` or `Ctrl+C`.
 
 ## How it works
 
