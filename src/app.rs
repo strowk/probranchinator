@@ -62,8 +62,8 @@ impl App {
     }
 }
 
-pub(crate) fn run_app(repo: Repository) -> Result<(), Box<dyn Error>> {
-    let answer = analysis::analyse(repo).unwrap();
+pub(crate) fn run_app(repo: Repository, branches: Vec<String>) -> Result<(), Box<dyn Error>> {
+    let answer = analysis::analyse(repo, branches).unwrap();
     answer.iter().for_each(|x| {
         x.iter().for_each(|y| {
             println!("{}", y);

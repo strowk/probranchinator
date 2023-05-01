@@ -8,10 +8,12 @@ use crate::repo::get_repo;
 
 /// Terminal tool to analyse conflicts between branches in a git repository
 #[derive(Parser, Debug)]
-#[command(name = "Probranchinator", version = "0.1.0", author = "Your Name")]
+#[command(name = "probranchinator", version, author)]
 struct Args {
     #[arg(short, long)]
     remote: String,
+
+    branches: Vec<String>,
 }
 
 // TODO:
@@ -20,7 +22,7 @@ struct Args {
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
     let repo = get_repo(args.remote.as_str())?;
-    return app::run_app(repo);
+    return app::run_app(repo, args.branches);
 }
 
 #[cfg(test)]

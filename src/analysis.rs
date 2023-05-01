@@ -4,7 +4,7 @@ use git2::{BranchType, Repository};
 // TODO: cleanup the code - remove the unwraps and add error handling
 
 // fn get_sorted_branches(repo_path: &str) -> Result<Vec<String>, git2::Error> {
-fn get_sorted_branches(repo: &Repository) -> Result<Vec<String>> {
+fn get_recent_branches(repo: &Repository) -> Result<Vec<String>> {
     // TODO: reverse the order of the branches so that the most recent ones are first
     // and remove reverse() from main()
 
@@ -27,32 +27,47 @@ fn get_sorted_branches(repo: &Repository) -> Result<Vec<String>> {
     }
 
     branches.sort_by_key(|b| b.0.get().peel_to_commit().unwrap().committer().when());
+
+    // maps branches to branch name and removes "origin/" prefix
     Ok(branches
         .into_iter()
-        .map(|(branch, _)| branch.name().unwrap().unwrap().to_string())
+        .map(|(branch, _)| {
+            branch
+                .name()
+                .unwrap()
+                .unwrap()
+                .to_string()
+                .replacen("origin/", "", 1)
+        })
         .collect())
 }
 
-pub(crate) fn analyse(repo: Repository) -> Result<Vec<Vec<String>>> {
+pub(crate) fn analyse(repo: Repository, branches: Vec<String>) -> Result<Vec<Vec<String>>> {
     let mut answer: Vec<Vec<String>> = Vec::new();
 
-    let args = get_sorted_branches(&repo)?;
+    // get recent branches if none are provided
+    let branches = match branches[..] {
+        [] => get_recent_branches(&repo)?,
+        _ => branches,
+    };
+
     let starting_head = repo.head()?;
 
-    for i in 0..args.len() {
+    for i in 0..branches.len() {
         //  result is not actually always symmetric
         // for j in i + 1..args.len() {
-        for j in 0..args.len() {
+        for j in 0..branches.len() {
             if i == j {
                 continue;
             }
             let mut row: Vec<String> = Vec::new();
 
-            let into_branch = &args[j];
-            let from_branch = &args[i];
+            let into_branch = &branches[j];
+            let from_branch = &branches[i];
 
-            let their_head = repo.find_reference(&format!("refs/remotes/{}", from_branch))?;
-            let our_head = repo.find_reference(&format!("refs/remotes/{}", into_branch))?;
+            let their_head =
+                repo.find_reference(&format!("refs/remotes/origin/{}", from_branch))?;
+            let our_head = repo.find_reference(&format!("refs/remotes/origin/{}", into_branch))?;
             let their_commit = repo.reference_to_annotated_commit(&their_head)?;
             let analysis = repo.merge_analysis_for_ref(&our_head, &[&their_commit])?;
 

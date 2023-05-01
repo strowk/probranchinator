@@ -1,5 +1,4 @@
 [target.aarch64-apple-darwin]
-# dockerfile = "./custom/darwin-aarch64.Dockerfile"
 image = "ghcr.io/cross-rs/aarch64-apple-darwin-cross:local"
 
 [target.x86_64-apple-darwin]

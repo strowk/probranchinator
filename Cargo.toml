@@ -5,6 +5,7 @@ version = "0.1.0"
 license = "MIT"
 repository = "https://github.com/strowk/probranchinator/"
 edition = "2021"
+authors = ["Timur Sultanaev <str.write@gmail.com>"]
 
 [dependencies]
 git2 = { version = "0.16.1", default-features = false }
