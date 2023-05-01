@@ -7,11 +7,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- List of branches to analyse can now be passed as a CLI arguments
+- List of branches to analyse can now be passed as a CLI arguments.
+- Exit on Ctrl+C or SIGINT.
 
 ### Fixed
 
-- Remove "origin/" prefix from branch names in output
+- Remove "origin/" prefix from branch names in output.
 
 ## [v0.1.0] - 2023-05-01
 

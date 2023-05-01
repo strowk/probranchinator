@@ -4,7 +4,14 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use git2::Repository;
-use std::{error::Error, io};
+use std::{
+    error::Error,
+    io,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+};
 use tui::{
     backend::{Backend, CrosstermBackend},
     layout::{Constraint, Layout},
@@ -99,13 +106,32 @@ pub(crate) fn run_app(repo: Repository, branches: Vec<String>) -> Result<(), Box
     Ok(())
 }
 
-fn _run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> io::Result<()> {
+fn _run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> eyre::Result<()> {
+    let received_sigint = Arc::new(AtomicBool::new(false));
+    let sigint_reading = received_sigint.clone();
+    ctrlc::set_handler(move || {
+        received_sigint.store(true, Ordering::Relaxed);
+    })
+    .expect("Error setting Ctrl-C handler");
+
     loop {
+        if sigint_reading.load(Ordering::Relaxed) {
+            return Ok(());
+        }
+
         terminal.draw(|f| ui(f, &mut app))?;
 
         if let Event::Key(key) = event::read()? {
             match key.code {
                 KeyCode::Char('q') => return Ok(()),
+                KeyCode::Char('c') => {
+                    if key
+                        .modifiers
+                        .contains(crossterm::event::KeyModifiers::CONTROL)
+                    {
+                        return Ok(());
+                    }
+                }
                 KeyCode::Down => app.next(),
                 KeyCode::Up => app.previous(),
                 _ => {}
@@ -158,9 +184,6 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 .title("Merge Analysis"),
         )
         .highlight_style(selected_style)
-        .widths(&[
-            Constraint::Length(60),
-            Constraint::Percentage(50),
-        ]);
+        .widths(&[Constraint::Length(60), Constraint::Percentage(50)]);
     f.render_stateful_widget(t, rects[0], &mut app.state);
 }

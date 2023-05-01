@@ -15,3 +15,5 @@ tempfile = "3.5.0"
 anyhow = "1.0.70"
 clap = { version = "4.2.0", features = ["derive"] }
 fehler = "1.0.0"
+ctrlc = "3.2.5"
+eyre = "0.6.8"
