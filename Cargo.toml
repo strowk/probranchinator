@@ -16,3 +16,13 @@ clap = { version = "4.2.0", features = ["derive"] }
 fehler = "1.0.0"
 ctrlc = "3.2.5"
 eyre = "0.6.8"
+
+
+[package.metadata.release]
+# Disable publishing to crates.io, it is done by GitHub Actions
+publish = false
+
+[package.metadata.release.pre-release-replacements]
+# Replace Unreleased with version number in CHANGELOG.md
+search = "## [Unreleased]"
+replace = "## [{{version}}] - {{date}}"
