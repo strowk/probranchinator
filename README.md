@@ -10,6 +10,15 @@ Download a binary from [latest release](https://github.com/strowk/probranchinato
 
 Tool requires `git` CLI to be installed and available in `$PATH`.
 
+### Install with script
+
+You can also use `install.sh` script with `bash` shell. 
+It will download the latest release and put it in `/usr/local/bin` directory.
+
+```bash
+curl -s https://raw.githubusercontent.com/strowk/probranchinator/main/install.sh | bash
+```
+
 ## Usage
 
 ```bash
