@@ -38,6 +38,10 @@ jobs:
           name: target
           path: |
             target/**/release/probranchinator
+      - name: Log into crates.io
+        if: github.event_name != 'pull_request'
+        run: cargo login -- ${{ secrets.CRATES_IO_TOKEN }}
+        shell: bash
       - run: tar -czf probranchinator-aarch64-apple-darwin.tar.gz target/aarch64-apple-darwin/release/probranchinator
       - run: tar -czf probranchinator-x86_64-apple-darwin.tar.gz target/x86_64-apple-darwin/release/probranchinator
       - run: tar -czf probranchinator-x86_64-unknown-linux-gnu.tar.gz target/x86_64-unknown-linux-gnu/release/probranchinator
@@ -60,3 +64,6 @@ jobs:
           draft: ${{ !startsWith(github.ref, 'refs/tags/v') && steps.changelog-reader.outputs.status == 'unreleased' }}
           files: |
             probranchinator-*.tar.gz
+      - name: Publish crate
+        run: cargo publish ${{ !startsWith(github.ref, 'refs/tags/v') && '--dry-run' || '' }}
+        shell: bash
