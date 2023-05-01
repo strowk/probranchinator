@@ -4,7 +4,7 @@ use git2::{BranchType, Repository};
 // TODO: cleanup the code - remove the unwraps and add error handling
 
 // fn get_sorted_branches(repo_path: &str) -> Result<Vec<String>, git2::Error> {
-fn get_recent_branches(repo: &Repository) -> Result<Vec<String>> {
+fn get_recent_branches(repo: &Repository, recent: usize) -> Result<Vec<String>> {
     // TODO: reverse the order of the branches so that the most recent ones are first
     // and remove reverse() from main()
 
@@ -39,15 +39,20 @@ fn get_recent_branches(repo: &Repository) -> Result<Vec<String>> {
                 .to_string()
                 .replacen("origin/", "", 1)
         })
+        .take(recent)
         .collect())
 }
 
-pub(crate) fn analyse(repo: Repository, branches: Vec<String>) -> Result<Vec<Vec<String>>> {
+pub(crate) fn analyse(
+    repo: Repository,
+    branches: Vec<String>,
+    recent: usize,
+) -> Result<Vec<Vec<String>>> {
     let mut answer: Vec<Vec<String>> = Vec::new();
 
     // get recent branches if none are provided
     let branches = match branches[..] {
-        [] => get_recent_branches(&repo)?,
+        [] => get_recent_branches(&repo, recent)?,
         _ => branches,
     };
 

@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - List of branches to analyse can now be passed as a CLI arguments.
 - Exit on Ctrl+C or SIGINT.
+- Configurable limit on number of recent branches to analyse if no branches are passed as CLI arguments.
 
 ### Fixed
 
