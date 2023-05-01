@@ -38,6 +38,14 @@ jobs:
           name: target
           path: |
             target/**/release/probranchinator
+      - name: Read changelog
+        id: changelog-reader
+        if: >
+          github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ (github.ref_type == 'tag' && !contains(github.ref_name, '-') && github.ref_name) || 'Unreleased' }}
+          path: ./CHANGELOG.md
       - name: Log into crates.io
         if: github.event_name != 'pull_request'
         run: cargo login -- ${{ secrets.CRATES_IO_TOKEN }}
@@ -51,14 +59,6 @@ jobs:
       - run: tar -czf probranchinator-x86_64-apple-darwin.tar.gz target/x86_64-apple-darwin/release/probranchinator
       - run: tar -czf probranchinator-x86_64-unknown-linux-gnu.tar.gz target/x86_64-unknown-linux-gnu/release/probranchinator
       - run: tar -czf probranchinator-x86_64-pc-windows-gnu.tar.gz target/x86_64-pc-windows-gnu/release/probranchinator.exe
-      - name: Read changelog
-        id: changelog-reader
-        if: >
-          github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          version: ${{ (github.ref_type == 'tag' && !contains(github.ref_name, '-') && github.ref_name) || 'Unreleased' }}
-          path: ./CHANGELOG.md
       - name: Create GitHub release
         if: >
           github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
