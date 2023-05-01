@@ -26,7 +26,7 @@ publish = false
 [[package.metadata.release.pre-release-replacements]]
 file = "CHANGELOG.md"
 search = "Unreleased"
-replace = "{{version}}"
+replace = "v{{version}}"
 
 # Replace ReleaseDate with current date in CHANGELOG.md
 [[package.metadata.release.pre-release-replacements]]
