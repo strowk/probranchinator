@@ -12,7 +12,6 @@ git2 = { version = "0.16.1", default-features = false }
 tui = "0.19"
 crossterm = "0.25"
 tempfile = "3.5.0"
-anyhow = "1.0.70"
 clap = { version = "4.2.0", features = ["derive"] }
 fehler = "1.0.0"
 ctrlc = "3.2.5"

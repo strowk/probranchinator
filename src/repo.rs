@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use eyre::{Context, Result};
 use git2::Repository;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
@@ -108,7 +108,7 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
         let child = cmd.spawn()?;
         let output = child.wait_with_output()?;
         if !output.status.success() {
-            anyhow::bail!("Failed to fetch repository");
+            eyre::bail!("Failed to fetch repository");
         }
     }
 

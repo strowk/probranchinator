@@ -1,4 +1,4 @@
-use anyhow::Result;
+use eyre::Result;
 use git2::{BranchType, Repository};
 
 // TODO: cleanup the code - remove the unwraps and add error handling
