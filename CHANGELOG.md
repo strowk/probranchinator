@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+- Clone remote silently instead of forwarding output to stdout.
+
 ## [v0.2.1] - 2023-05-05
 
 ## Fixed
 
-- Call prune after fetching remote to not show deleted branches
+- Call prune after fetching remote to not show deleted branches.
 
 ## [v0.2.0] - 2023-05-01
 
