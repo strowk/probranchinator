@@ -23,6 +23,11 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
 
     let have_cached_repo = tmp_path.is_dir();
 
+    println!(
+        "Using repository cache at {:?} (cached: {})",
+        tmp_path, have_cached_repo
+    );
+
     let repo = if have_cached_repo {
         // If the folder already exists, open the repository in it
         Repository::open(&tmp_path).with_context(|| {
@@ -109,6 +114,26 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
         let output = child.wait_with_output()?;
         if !output.status.success() {
             eyre::bail!("Failed to fetch repository");
+        }
+
+        // this does not work, apparently due to some git2 problem
+        // let mut remote = repo.find_remote("origin")?;
+        // remote.prune(None)?;
+
+        // then prune all branches that are not on origin anymore
+        // also using git command line tool, because git2-rs
+        // fails with "this remote has never connected", probably
+        // due to the fact that we cloned with git command line tool
+
+        let mut cmd = std::process::Command::new("git");
+        cmd.arg("remote");
+        cmd.arg("prune");
+        cmd.arg("origin");
+        cmd.current_dir(&tmp_path);
+        let child = cmd.spawn()?;
+        let output = child.wait_with_output()?;
+        if !output.status.success() {
+            eyre::bail!("Failed to prune repository");
         }
     }
 

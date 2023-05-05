@@ -41,3 +41,47 @@ fn test_get_repo() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+#[test]
+fn test_delete_remote_branch() -> Result<(), Box<dyn std::error::Error>> {
+    let (_tmp_dir, origin) = create_bare_repo()?;
+    let remote_url = format!("file:///{}", PathBuf::from(origin.path()).display());
+    println!("Using bare repo from {:?}", remote_url);
+
+    // initialize first commit in origin repository
+
+    let mut index = origin.index()?;
+    let oid = index.write_tree()?;
+    let tree = origin.find_tree(oid)?;
+    let sig = origin.signature()?;
+    origin.commit(Some("HEAD"), &sig, &sig, "initial commit", &tree, &[])?;
+
+    // Create a branch in the origin repository
+    let branch_name = "test-branch";
+    let mut test_branch = origin.branch(branch_name, &origin.head()?.peel_to_commit()?, false)?;
+
+    // Test cloning the repository for the first time
+    let cloned_repo = get_repo(&remote_url)?;
+
+    // Check that the branch is present in the cloned repository
+    let branches = cloned_repo.branches(None)?;
+    let branch_names: Vec<_> = branches
+        .map(|b| b.unwrap().0.name().unwrap().unwrap().to_string())
+        .collect();
+    println!("Branches: {:?}", branch_names);
+    let origin_branch_name = format!("origin/{}", branch_name);
+    assert!(branch_names.contains(&origin_branch_name));
+
+    // Delete branch in the origin repository
+    test_branch.delete()?;
+
+    // Check that the branch is not present in the cloned repository after another get_repo call
+    let cloned_repo = get_repo(&remote_url)?;
+    let branches = cloned_repo.branches(None)?;
+    let branch_names: Vec<_> = branches
+        .map(|b| b.unwrap().0.name().unwrap().unwrap().to_string())
+        .collect();
+    assert!(!branch_names.contains(&origin_branch_name));
+
+    Ok(())
+}
