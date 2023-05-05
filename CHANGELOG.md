@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+## [v0.2.1] - 2023-05-05
+
 ## Fixed
 
 - Call prune after fetching remote to not show deleted branches
@@ -42,6 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Output is given in terminal application as a table.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/strowk/probranchinator/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/strowk/probranchinator/compare/v0.2.1...HEAD
+[v0.2.1]: https://github.com/strowk/probranchinator/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/strowk/probranchinator/compare/v0.1.0...v0.2.0
 [v0.1.0]: https://github.com/strowk/probranchinator/releases/tag/v0.1.0
