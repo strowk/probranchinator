@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+## Fixed
+
+- Call prune after fetching remote to not show deleted branches
+
 ## [v0.2.0] - 2023-05-01
 
 ### Added
