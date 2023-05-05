@@ -9,10 +9,11 @@ pub(crate) fn clone_repo(repo_url: &str, dst: &PathBuf) {
     cmd.arg("clone");
     cmd.arg(repo_url);
     cmd.arg(dst);
-    let child = cmd.spawn()?;
-    let output = child.wait_with_output()?;
+    let output = cmd.output()?;
     if !output.status.success() {
-        eyre::bail!("Failed to clone repository");
+        eyre::bail!(format!(
+            "Failed to clone repository: {}",
+            String::from_utf8_lossy(&output.stderr)
+        ));
     }
-
 }
