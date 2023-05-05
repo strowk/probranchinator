@@ -2,7 +2,7 @@
 
 This is a CLI tool that compares all branches in repository and displays how they can be merged to each other.
 
-![Gif](./probranchinator.gif)
+![Gif](./vhs/base.gif)
 
 ## Installation
 
