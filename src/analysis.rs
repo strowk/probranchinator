@@ -47,16 +47,6 @@ pub(crate) struct MergeAnalysisResult {
     pub status: MergeAnalysisStatus,
 }
 
-impl MergeAnalysisResult {
-    // returns vector of Strings to show in the table
-    pub(crate) fn to_table_row(&self) -> Vec<String> {
-        vec![
-            format!("{}", self.status),
-            format!("{} -> {}", self.from_branch, self.to_branch),
-        ]
-    }
-}
-
 impl Display for MergeAnalysisResult {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(
