@@ -74,7 +74,7 @@ pub(crate) fn run_app(
     branches: Vec<String>,
     recent: usize,
 ) -> Result<(), Box<dyn Error>> {
-    let answer = analysis::analyse(repo, branches, recent).unwrap();
+    let answer = analysis::analyse(repo, branches, recent)?;
     answer.iter().for_each(|x| {
         println!("{}", x);
     });
