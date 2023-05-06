@@ -12,7 +12,7 @@ Tool requires `git` CLI to be installed and available in `$PATH`.
 
 ### Install with script
 
-You can also use `install.sh` script with `bash` shell. 
+You can also use `install.sh` script with `bash` shell.
 It will download the latest release and put it in `/usr/local/bin` directory.
 
 ```bash
@@ -78,10 +78,9 @@ Tool compares branches with each other and shows each comparison in a table.
 Each entry in that table represents an attempt of merging one branch into another.
 You can receive one of the following results:
 
-- ✅✅ No changes: the branches are already up-to-date
+- ✅✅ No changes: already up-to-date
 - 🚀✅ No confilcts: fast-forward merge is possible
-- 🚧🍀 Found conflicts, but can resolve them automatically
+- 🤝✅ No conflicts: automatic merge is possible
 - 🚧🔧 Found conflicts, have to resolve them manually
 - ❌❌ No merge is possible (usually means your branches do not have common ancestor)
 - ❌🤔 Unknown merge analysis result (this is not supposed to happen really)
-

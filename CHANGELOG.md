@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. 
+All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
@@ -8,7 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+### Fixed
+
+- Corrected status message when normal merge is possible.
+
+### Changed
+
 - Clone remote silently instead of forwarding output to stdout.
+- Log output is now more compact and easier to read.
+- If there was an error while reading branch name, that branch would be ignored instead of crashing.
+- If there was an error while getting branch last commit, app would exit with error instead of panicing.
+- Uses unstable sort for recent branches as it is recommended to be faster and we don't care about order of branches with the same date.
 
 ## [v0.2.1] - 2023-05-05
 
@@ -46,6 +56,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Output is given in terminal application as a table.
 
 <!-- next-url -->
+
 [Unreleased]: https://github.com/strowk/probranchinator/compare/v0.2.1...HEAD
 [v0.2.1]: https://github.com/strowk/probranchinator/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/strowk/probranchinator/compare/v0.1.0...v0.2.0

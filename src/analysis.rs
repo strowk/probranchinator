@@ -1,54 +1,78 @@
+use std::fmt::Display;
+
 use eyre::Result;
-use git2::{BranchType, Repository};
+use git2::Repository;
 
-// TODO: cleanup the code - remove the unwraps and add error handling
+use crate::recent::get_recent_branches;
 
-// fn get_sorted_branches(repo_path: &str) -> Result<Vec<String>, git2::Error> {
-fn get_recent_branches(repo: &Repository, recent: usize) -> Result<Vec<String>> {
-    // TODO: reverse the order of the branches so that the most recent ones are first
-    // and remove reverse() from main()
+enum MergeAnalysisStatus {
+    UpToDate,
+    FastForward,
+    None,
+    Error { message: String },
+    Normal,
+    Unknown,
+    Conflicts,
+}
 
-    // TODO: take only recent f.e. 10 branches
-
-    // let repo = Repository::open(repo_path)?;
-    let mut branches = repo
-        .branches(Some(BranchType::Remote))?
-        .map(|b| b.unwrap())
-        .filter(|b| b.0.name().unwrap().unwrap() != "origin/HEAD")
-        .collect::<Vec<_>>();
-
-    println!("Received branches");
-    for (branch, branch_type) in branches.iter() {
-        println!(
-            "branch - {} ({:?})",
-            branch.name().unwrap().unwrap(),
-            branch_type
-        );
+impl Display for MergeAnalysisStatus {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            MergeAnalysisStatus::UpToDate => {
+                write!(f, "✅✅ No changes: already up-to-date.")
+            }
+            MergeAnalysisStatus::FastForward => {
+                write!(f, "🚀✅ No confilcts: fast-forward merge is possible.")
+            }
+            MergeAnalysisStatus::None => {
+                write!(f, "❌❌ No merge is possible - analysis gave none.")
+            }
+            MergeAnalysisStatus::Error { message } => {
+                write!(f, "❌❌ No merge is possible - {}.", message)
+            }
+            MergeAnalysisStatus::Unknown => write!(f, "❌🤔 Unknown merge analysis result."),
+            MergeAnalysisStatus::Conflicts => {
+                write!(f, "🚧🔧 Found conflicts, have to resolve them manually.")
+            }
+            MergeAnalysisStatus::Normal => {
+                write!(f, "🤝✅ No conflicts: automatic merge is possible.")
+            }
+        }
     }
+}
 
-    branches.sort_by_key(|b| b.0.get().peel_to_commit().unwrap().committer().when());
+pub(crate) struct MergeAnalysisResult {
+    from_branch: String,
+    to_branch: String,
+    status: MergeAnalysisStatus,
+}
 
-    // maps branches to branch name and removes "origin/" prefix
-    Ok(branches
-        .into_iter()
-        .map(|(branch, _)| {
-            branch
-                .name()
-                .unwrap()
-                .unwrap()
-                .to_string()
-                .replacen("origin/", "", 1)
-        })
-        .take(recent)
-        .collect())
+impl MergeAnalysisResult {
+    // returns vector of Strings to show in the table
+    pub(crate) fn to_table_row(&self) -> Vec<String> {
+        vec![
+            format!("{}", self.status),
+            format!("{} -> {}", self.from_branch, self.to_branch),
+        ]
+    }
+}
+
+impl Display for MergeAnalysisResult {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "{} -> {} : {}",
+            self.from_branch, self.to_branch, self.status
+        )
+    }
 }
 
 pub(crate) fn analyse(
     repo: Repository,
     branches: Vec<String>,
     recent: usize,
-) -> Result<Vec<Vec<String>>> {
-    let mut answer: Vec<Vec<String>> = Vec::new();
+) -> Result<Vec<MergeAnalysisResult>> {
+    let mut answer: Vec<MergeAnalysisResult> = Vec::new();
 
     // get recent branches if none are provided
     let branches = match branches[..] {
@@ -59,14 +83,10 @@ pub(crate) fn analyse(
     let starting_head = repo.head()?;
 
     for i in 0..branches.len() {
-        //  result is not actually always symmetric
-        // for j in i + 1..args.len() {
         for j in 0..branches.len() {
             if i == j {
                 continue;
             }
-            let mut row: Vec<String> = Vec::new();
-
             let into_branch = &branches[j];
             let from_branch = &branches[i];
 
@@ -75,17 +95,21 @@ pub(crate) fn analyse(
             let our_head = repo.find_reference(&format!("refs/remotes/origin/{}", into_branch))?;
             let their_commit = repo.reference_to_annotated_commit(&their_head)?;
             let analysis = repo.merge_analysis_for_ref(&our_head, &[&their_commit])?;
-
-            // println!("\nComparing {} with {}:", into_branch, from_branch);
+            let mut result = MergeAnalysisResult {
+                from_branch: from_branch.clone(),
+                to_branch: into_branch.clone(),
+                status: MergeAnalysisStatus::Unknown,
+            };
             if analysis.0.is_fast_forward() {
-                row.push("🚀✅ No confilcts: fast-forward merge is possible.".to_string());
+                result.status = MergeAnalysisStatus::FastForward;
             } else if analysis.0.is_normal() {
-                // println!("🛠️  A normal merge is possible."); // ⚠️ // 🚧 // 💣
                 let out_commit = repo.reference_to_annotated_commit(&our_head)?;
                 match check_normal_merge(&repo, &their_commit, &out_commit) {
-                    Ok(result) => row.push(result.to_string()),
+                    Ok(status) => result.status = status,
                     Err(error) => {
-                        row.push(format!("❌❌ No merge is possible - {}.", error.message()))
+                        result.status = MergeAnalysisStatus::Error {
+                            message: error.message().to_owned(),
+                        }
                     }
                 }
 
@@ -96,20 +120,14 @@ pub(crate) fn analyse(
                     git2::ResetType::Hard,
                     None,
                 )?;
-            // TODO - figure out if there are conflicts
             } else if analysis.0.is_up_to_date() {
-                row.push("✅✅ No changes: the branches are already up-to-date.".to_string());
+                result.status = MergeAnalysisStatus::UpToDate;
             } else if analysis.0.is_none() {
-                row.push("❌❌ No merge is possible - analysis gave none.".to_string());
+                result.status = MergeAnalysisStatus::None;
             } else {
-                row.push("❌🤔 Unknown merge analysis result.".to_string());
+                result.status = MergeAnalysisStatus::Unknown;
             }
-            row.push(format!(
-                "{} into {}",
-                from_branch.clone(),
-                into_branch.clone()
-            ));
-            answer.push(row);
+            answer.push(result);
         }
     }
 
@@ -120,7 +138,7 @@ fn check_normal_merge(
     repo: &Repository,
     local: &git2::AnnotatedCommit,
     remote: &git2::AnnotatedCommit,
-) -> Result<&'static str, git2::Error> {
+) -> Result<MergeAnalysisStatus, git2::Error> {
     let local_tree = repo.find_commit(local.id())?.tree()?;
     let remote_tree = repo.find_commit(remote.id())?.tree()?;
     let ancestor = repo
@@ -130,7 +148,7 @@ fn check_normal_merge(
 
     if idx.has_conflicts() {
         repo.checkout_index(Some(&mut idx), None)?;
-        return Ok("🚧🔧 Found conflicts, have to resolve them manually.");
+        return Ok(MergeAnalysisStatus::Conflicts);
     }
-    return Ok("🚧🍀 Found conflicts, but can resolve them automatically.");
+    Ok(MergeAnalysisStatus::Normal)
 }

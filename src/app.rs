@@ -76,10 +76,7 @@ pub(crate) fn run_app(
 ) -> Result<(), Box<dyn Error>> {
     let answer = analysis::analyse(repo, branches, recent).unwrap();
     answer.iter().for_each(|x| {
-        x.iter().for_each(|y| {
-            println!("{}", y);
-        });
-        println!("");
+        println!("{}", x);
     });
     println!("analysis done!");
 
@@ -91,7 +88,7 @@ pub(crate) fn run_app(
     let mut terminal = Terminal::new(backend)?;
 
     // create app and run it
-    let app = App::new(answer);
+    let app = App::new(answer.iter().map(|x| x.to_table_row()).collect());
     let res = _run_app(&mut terminal, app);
 
     // restore terminal

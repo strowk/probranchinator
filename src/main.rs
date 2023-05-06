@@ -1,9 +1,10 @@
 mod analysis;
 mod app;
 use std::error::Error;
-mod clone;
-mod repo;
 mod cli;
+mod clone;
+mod recent;
+mod repo;
 
 use clap::Parser;
 
