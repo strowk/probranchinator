@@ -41,10 +41,8 @@ probranchinator.exe [OPTIONS] --remote <REMOTE> [BRANCHES]...
 Example:
 
 ```bash
-probranchinator --remote=https://github.com/strowk/probranchinator
+probranchinator --remote=https://github.com/strowk/probranchinator-test.git
 ```
-
-Change remote to something else, as probranchinator itself does not have many branches ATM.
 
 If you want to examine your local repository, you can use `file://` protocol:
 
