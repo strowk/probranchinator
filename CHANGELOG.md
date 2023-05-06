@@ -11,13 +11,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Corrected status message when normal merge is possible.
+- If there was an error while reading branch name, that branch would be ignored instead of crashing.
+- If there was an error while getting branch last commit, app would exit with error instead of panicing.
+- Other issues during analysis would cause correct exit and error message instead of panicing.
 
 ### Changed
 
 - Clone remote silently instead of forwarding output to stdout.
 - Log output is now more compact and easier to read.
-- If there was an error while reading branch name, that branch would be ignored instead of crashing.
-- If there was an error while getting branch last commit, app would exit with error instead of panicing.
 - Uses unstable sort for recent branches as it is recommended to be faster and we don't care about order of branches with the same date.
 
 ## [v0.2.1] - 2023-05-05
