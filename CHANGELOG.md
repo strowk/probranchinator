@@ -10,8 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.2.2] - 2023-05-06
 
-## [v0.2.2] - 2023-05-06
-
 ### Fixed
 
 - Corrected status message when normal merge is possible.
