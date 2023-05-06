@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.2.2] - 2023-05-06
 
+## [v0.2.2] - 2023-05-06
+
 ### Fixed
 
 - Corrected status message when normal merge is possible.
@@ -60,6 +62,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 <!-- next-url -->
 [Unreleased]: https://github.com/strowk/probranchinator/compare/v0.2.2...HEAD
+[v0.2.2]: https://github.com/strowk/probranchinator/compare/v0.2.2...v0.2.2
 
 [v0.2.2]: https://github.com/strowk/probranchinator/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/strowk/probranchinator/compare/v0.2.0...v0.2.1
