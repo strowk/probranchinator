@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.2.1] - 2023-05-05
 
-## Fixed
+### Fixed
 
 - Call prune after fetching remote to not show deleted branches.
 
