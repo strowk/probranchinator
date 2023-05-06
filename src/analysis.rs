@@ -5,7 +5,7 @@ use git2::Repository;
 
 use crate::recent::get_recent_branches;
 
-enum MergeAnalysisStatus {
+pub(crate) enum MergeAnalysisStatus {
     UpToDate,
     FastForward,
     None,
@@ -42,9 +42,9 @@ impl Display for MergeAnalysisStatus {
 }
 
 pub(crate) struct MergeAnalysisResult {
-    from_branch: String,
-    to_branch: String,
-    status: MergeAnalysisStatus,
+    pub from_branch: String,
+    pub to_branch: String,
+    pub status: MergeAnalysisStatus,
 }
 
 impl MergeAnalysisResult {

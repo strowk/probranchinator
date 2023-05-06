@@ -16,19 +16,20 @@ use tui::{
     backend::{Backend, CrosstermBackend},
     layout::{Constraint, Layout},
     style::{Color, Modifier, Style},
+    text::{Span, Spans},
     widgets::{Block, Borders, Cell, Row, Table, TableState},
     Frame, Terminal,
 };
 
-use crate::analysis;
+use crate::analysis::{self, MergeAnalysisResult};
 
 struct App {
     state: TableState,
-    items: Vec<Vec<String>>,
+    items: Vec<MergeAnalysisResult>,
 }
 
 impl App {
-    fn new(answer: Vec<Vec<String>>) -> App {
+    fn new(answer: Vec<MergeAnalysisResult>) -> App {
         App {
             state: TableState::default(),
             items: answer,
@@ -88,7 +89,7 @@ pub(crate) fn run_app(
     let mut terminal = Terminal::new(backend)?;
 
     // create app and run it
-    let app = App::new(answer.iter().map(|x| x.to_table_row()).collect());
+    let app = App::new(answer);
     let res = _run_app(&mut terminal, app);
 
     // restore terminal
@@ -150,26 +151,25 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
     let selected_style = Style::default().add_modifier(Modifier::REVERSED);
 
     let rows = app.items.iter().map(|item| {
-        let height = item
-            .iter()
-            .map(|content| content.chars().filter(|c| *c == '\n').count())
-            .max()
-            .unwrap_or(0)
-            + 1;
-        let cells = item.iter().map(|c| {
-            c.clone()
-            // TODO: highlight branch names
-
-            // Cell::from(Spans::from(vec![Span::styled(
-            //     c.clone(),
-            //     Style::default().fg(Color::White),
-            // )]))
-        });
-        Row::new(cells).height(height as u16).bottom_margin(0)
+        let cells = vec![
+            Cell::from(item.status.to_string()),
+            Cell::from(Spans::from(vec![
+                Span::styled(
+                    &item.from_branch,
+                    Style::default().add_modifier(Modifier::BOLD),
+                ),
+                Span::styled(" -> ", Style::default()),
+                Span::styled(
+                    &item.to_branch,
+                    Style::default().add_modifier(Modifier::BOLD),
+                ),
+            ])),
+        ];
+        Row::new(cells).height(1).bottom_margin(0)
     });
 
     let normal_style = Style::default().bg(Color::Blue);
-    let header_cells = ["Analysis Result", "Branches"]
+    let header_cells = ["Analysis Result", "Merging Branches"]
         .iter()
         .map(|h| Cell::from(*h).style(Style::default().fg(Color::Red)));
     let header = Row::new(header_cells)
