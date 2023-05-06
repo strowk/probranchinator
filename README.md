@@ -69,8 +69,19 @@ To exit the program, press `q` or `Ctrl+C`.
 
 ## How it works
 
-1. Clones remote repository into temporary local repository (if necessary)
-2. Fetches all branches from remote
-3. Compares all branches with each other
+1. (if necessary) Clones remote repository into temporary local repository
+2. Fetches all branches from remote and prunes deleted branches
+3. Compares selected branches with each other (either passed via CLI or most recently updated)
 4. Outputs result in terminal
+
+Tool compares branches with each other and shows each comparison in a table.
+Each entry in that table represents an attempt of merging one branch into another.
+You can receive one of the following results:
+
+- ✅✅ No changes: the branches are already up-to-date
+- 🚀✅ No confilcts: fast-forward merge is possible
+- 🚧🍀 Found conflicts, but can resolve them automatically
+- 🚧🔧 Found conflicts, have to resolve them manually
+- ❌❌ No merge is possible (usually means your branches do not have common ancestor)
+- ❌🤔 Unknown merge analysis result (this is not supposed to happen really)
 
