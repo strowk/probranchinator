@@ -20,6 +20,8 @@ jobs:
             ./cross
       - name: Expose GitHub Runtime
         uses: crazy-max/ghaction-github-runtime@v2
+      - run: git config --global user.name "Test Fella"
+      - run: git config --global user.email "justfortest@domain.example"
       - run: cargo test
       - run: cargo install cargo-make
       - run: cargo make install-cross
