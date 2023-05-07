@@ -20,7 +20,7 @@ fn test_get_repo() -> Result<(), Box<dyn std::error::Error>> {
     println!("Using bare repo from {:?}", remote_url);
 
     // Test cloning the repository for the first time
-    let cloned_repo_1 = get_repo(&remote_url)?;
+    let (cloned_repo_1, _, _) = get_repo(&remote_url)?;
 
     // Check that the repository path contains "probranchinator" and is under the system temporary directory
     assert!(cloned_repo_1
@@ -30,13 +30,13 @@ fn test_get_repo() -> Result<(), Box<dyn std::error::Error>> {
     assert!(cloned_repo_1.path().starts_with(env::temp_dir()));
 
     // Test opening the existing repository in the second call
-    let cloned_repo_2 = get_repo(&remote_url)?;
+    let (cloned_repo_2, _, _) = get_repo(&remote_url)?;
     assert_eq!(cloned_repo_2.path(), cloned_repo_1.path());
 
     // Test cloning a different repository
     let (_tmp_dir2, repo2) = create_bare_repo()?;
     let remote_url2 = format!("file:///{}", PathBuf::from(repo2.path()).display());
-    let cloned_repo_3 = get_repo(&remote_url2)?;
+    let (cloned_repo_3, _, _) = get_repo(&remote_url2)?;
     assert_ne!(cloned_repo_3.path(), cloned_repo_2.path());
 
     Ok(())
@@ -61,7 +61,7 @@ fn test_delete_remote_branch() -> Result<(), Box<dyn std::error::Error>> {
     let mut test_branch = origin.branch(branch_name, &origin.head()?.peel_to_commit()?, false)?;
 
     // Test cloning the repository for the first time
-    let cloned_repo = get_repo(&remote_url)?;
+    let (cloned_repo, _, _) = get_repo(&remote_url)?;
 
     // Check that the branch is present in the cloned repository
     let branches = cloned_repo.branches(None)?;
@@ -76,7 +76,7 @@ fn test_delete_remote_branch() -> Result<(), Box<dyn std::error::Error>> {
     test_branch.delete()?;
 
     // Check that the branch is not present in the cloned repository after another get_repo call
-    let cloned_repo = get_repo(&remote_url)?;
+    let (cloned_repo, _, _) = get_repo(&remote_url)?;
     let branches = cloned_repo.branches(None)?;
     let branch_names: Vec<_> = branches
         .map(|b| b.unwrap().0.name().unwrap().unwrap().to_string())

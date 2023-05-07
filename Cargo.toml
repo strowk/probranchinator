@@ -16,6 +16,7 @@ clap = { version = "4.2.0", features = ["derive"] }
 fehler = "1.0.0"
 ctrlc = "3.2.5"
 eyre = "0.6.8"
+indicatif = "0.17.3"
 
 
 [package.metadata.release]

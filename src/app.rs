@@ -3,7 +3,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use git2::Repository;
+use indicatif::{ProgressFinish, ProgressStyle};
 use std::{
     error::Error,
     io,
@@ -11,6 +11,7 @@ use std::{
         atomic::{AtomicBool, Ordering},
         Arc,
     },
+    time::Duration,
 };
 use tui::{
     backend::{Backend, CrosstermBackend},
@@ -21,7 +22,10 @@ use tui::{
     Frame, Terminal,
 };
 
-use crate::analysis::{self, MergeAnalysisResult};
+use crate::{
+    analysis::{self, MergeAnalysisResult},
+    repo::get_repo,
+};
 
 struct App {
     state: TableState,
@@ -71,15 +75,35 @@ impl App {
 }
 
 pub(crate) fn run_app(
-    repo: Repository,
+    remote: String,
     branches: Vec<String>,
     recent: usize,
 ) -> Result<(), Box<dyn Error>> {
+    let spinner = indicatif::ProgressBar::new_spinner()
+        .with_prefix("[1/2]")
+        .with_message("Retrieving repository...")
+        .with_finish(ProgressFinish::AndLeave)
+        .with_style(ProgressStyle::with_template(
+            "{prefix:.cyan/blue} {spinner} {msg}",
+        )?);
+    spinner.enable_steady_tick(Duration::from_millis(100));
+    let (repo, tmp_path, have_cached_repo) = get_repo(&remote)?;
+
+    spinner.set_style(ProgressStyle::with_template(
+        "Retrieved repository in {elapsed}",
+    )?);
+
+    spinner.finish();
+
+    eprintln!(
+        "Using repository cache at {:?} (cached: {})",
+        tmp_path, have_cached_repo
+    );
+
     let answer = analysis::analyse(repo, branches, recent)?;
     answer.iter().for_each(|x| {
         println!("{}", x);
     });
-    println!("analysis done!");
 
     // setup terminal
     enable_raw_mode()?;

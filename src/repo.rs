@@ -2,11 +2,12 @@ use eyre::{Context, Result};
 use git2::Repository;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
+use std::path::PathBuf;
 use std::{env, fs};
 
 use crate::clone::clone_repo;
 
-pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
+pub(crate) fn get_repo(remote_url: &str) -> Result<(Repository, PathBuf, bool)> {
     // Create the directory for the repositories under the system temporary directory
     let mut tmp_path = env::temp_dir();
     tmp_path.push("probranchinator");
@@ -22,11 +23,6 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
     tmp_path.push(subfolder_name);
 
     let have_cached_repo = tmp_path.is_dir();
-
-    println!(
-        "Using repository cache at {:?} (cached: {})",
-        tmp_path, have_cached_repo
-    );
 
     let repo = if have_cached_repo {
         // If the folder already exists, open the repository in it
@@ -137,5 +133,5 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<Repository> {
         }
     }
 
-    Ok(repo)
+    Ok((repo, tmp_path, have_cached_repo))
 }

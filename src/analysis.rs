@@ -1,7 +1,8 @@
-use std::fmt::Display;
+use std::{fmt::Display, time::Duration};
 
 use eyre::Result;
 use git2::Repository;
+use indicatif::ProgressStyle;
 
 use crate::recent::get_recent_branches;
 
@@ -70,16 +71,43 @@ pub(crate) fn analyse(
         _ => branches,
     };
 
+    // prepare progress indicator
+    let branches_length = branches.len();
+    let progress = indicatif::ProgressBar::new(
+        // would be comparing each branch to each other branch except itself
+        (branches_length * branches_length - branches_length).try_into()?,
+    )
+    .with_finish(indicatif::ProgressFinish::AndLeave);
+    progress.enable_steady_tick(Duration::from_millis(100));
+    progress.set_prefix("[2/2]");
+    progress.set_style(
+        ProgressStyle::with_template(
+            "{prefix:.cyan/blue} {spinner} Analysing branches... [{bar:!20}] {wide_msg}",
+        )?
+        .progress_chars("=>-"),
+    );
+
     let starting_head = repo.head()?;
 
-    for i in 0..branches.len() {
-        for j in 0..branches.len() {
+    for i in 0..branches_length {
+        for j in 0..branches_length {
             if i == j {
                 continue;
             }
+
             let into_branch = &branches[j];
             let from_branch = &branches[i];
 
+            progress.inc(1);
+            progress.length().and_then(|length| {
+                Some(progress.set_message(format!(
+                    "{}/{}: [{} -> {}]",
+                    progress.position(),
+                    length,
+                    from_branch,
+                    into_branch
+                )))
+            });
             let their_head =
                 repo.find_reference(&format!("refs/remotes/origin/{}", from_branch))?;
             let our_head = repo.find_reference(&format!("refs/remotes/origin/{}", into_branch))?;
@@ -120,6 +148,13 @@ pub(crate) fn analyse(
             answer.push(result);
         }
     }
+
+    // finish progress indicator and display elapsed time
+    progress.set_style(ProgressStyle::with_template(&format!(
+        "{} branches analysed in {{elapsed}}",
+        branches_length
+    ))?);
+    progress.finish_using_style();
 
     Ok(answer)
 }

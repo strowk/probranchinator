@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+### Added
+
+- Progress indicator for clone and analysis.
+
 ## [v0.2.3] - 2023-05-06
 
 ### Changed
@@ -66,8 +70,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Output is given in terminal application as a table.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/strowk/probranchinator/compare/v0.2.3...HEAD
 
+[Unreleased]: https://github.com/strowk/probranchinator/compare/v0.2.3...HEAD
 [v0.2.3]: https://github.com/strowk/probranchinator/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/strowk/probranchinator/compare/v0.2.2...v0.2.2
 [v0.2.2]: https://github.com/strowk/probranchinator/compare/v0.2.1...v0.2.2
