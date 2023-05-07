@@ -102,7 +102,7 @@ pub(crate) fn run_app(
 
     let answer = analysis::analyse(repo, branches, recent)?;
     answer.iter().for_each(|x| {
-        println!("{}", x);
+        eprintln!("{}", x);
     });
 
     // setup terminal
@@ -126,7 +126,7 @@ pub(crate) fn run_app(
     terminal.show_cursor()?;
 
     if let Err(err) = res {
-        println!("{:?}", err)
+        eprintln!("{:?}", err)
     }
 
     Ok(())
