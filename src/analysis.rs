@@ -1,11 +1,12 @@
-use std::{fmt::Display, time::Duration};
-
+use crate::recent::get_recent_branches;
 use eyre::Result;
 use git2::Repository;
 use indicatif::ProgressStyle;
+use serde::{Deserialize, Serialize};
+use std::{fmt::Display, time::Duration};
+use tabled::Tabled;
 
-use crate::recent::get_recent_branches;
-
+#[derive(Serialize, Deserialize)]
 pub(crate) enum MergeAnalysisStatus {
     UpToDate,
     FastForward,
@@ -42,6 +43,7 @@ impl Display for MergeAnalysisStatus {
     }
 }
 
+#[derive(Serialize, Deserialize, Tabled)]
 pub(crate) struct MergeAnalysisResult {
     pub from_branch: String,
     pub to_branch: String,

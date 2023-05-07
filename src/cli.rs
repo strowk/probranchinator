@@ -1,4 +1,43 @@
-use clap::{arg, command, Parser};
+use std::fmt::Display;
+
+use clap::{arg, command, Parser, ValueEnum};
+
+#[derive(Clone, Debug, ValueEnum)]
+pub(crate) enum OutputType {
+    Table,
+    Simple,
+    Markdown,
+    Json,
+    Interactive,
+}
+
+impl Display for OutputType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            OutputType::Table => write!(f, "table"),
+            OutputType::Markdown => write!(f, "markdown"),
+            OutputType::Simple => write!(f, "simple"),
+            OutputType::Json => write!(f, "json"),
+            OutputType::Interactive => write!(f, "interactive"),
+        }
+    }
+}
+
+// custom boolean to allow for --pretty to be true by default
+#[derive(Clone, Debug, ValueEnum, PartialEq, Eq)]
+pub(crate) enum BooleanCLI {
+    True,
+    False,
+}
+
+impl Display for BooleanCLI {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            BooleanCLI::True => write!(f, "true"),
+            BooleanCLI::False => write!(f, "false"),
+        }
+    }
+}
 
 /// Terminal tool to analyse conflicts between branches in a git repository
 #[derive(Parser, Debug)]
@@ -30,4 +69,20 @@ pub(crate) struct Args {
     /// If no branches are provided, the tool will analyse the most recent branches,
     /// up to the number provided by the `--recent` argument.
     pub branches: Vec<String>,
+
+    #[arg(short, long, default_value_t = OutputType::Interactive)]
+    /// How to output the results
+    ///
+    /// Choices are `table`, `json` and `interactive`.
+    ///
+    /// - table - outputs a table with the results
+    /// - json - outputs results in JSON format
+    /// - interactive - outputs results in terminal UI
+    pub output: OutputType,
+
+    #[arg(short, long, default_value_t = BooleanCLI::True)]
+    /// If output should be prettified
+    ///
+    /// Only applicable to `json` output type.
+    pub pretty: BooleanCLI,
 }

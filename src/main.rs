@@ -10,7 +10,7 @@ use clap::Parser;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = cli::Args::parse();
-    return app::run_app(args.remote, args.branches, args.recent);
+    return app::run_app(args);
 }
 
 #[cfg(test)]

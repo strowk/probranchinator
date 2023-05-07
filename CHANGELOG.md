@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Progress indicator for clone and analysis.
+- More types of output: JSON, table, simple text, markdown.
 
 ## [v0.2.3] - 2023-05-06
 

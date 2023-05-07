@@ -3,6 +3,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
+use fehler::throws;
 use indicatif::{ProgressFinish, ProgressStyle};
 use std::{
     error::Error,
@@ -24,6 +25,7 @@ use tui::{
 
 use crate::{
     analysis::{self, MergeAnalysisResult},
+    cli::{Args, BooleanCLI, OutputType},
     repo::get_repo,
 };
 
@@ -75,9 +77,13 @@ impl App {
 }
 
 pub(crate) fn run_app(
-    remote: String,
-    branches: Vec<String>,
-    recent: usize,
+    Args {
+        remote,
+        branches,
+        recent,
+        output,
+        pretty,
+    }: Args,
 ) -> Result<(), Box<dyn Error>> {
     let spinner = indicatif::ProgressBar::new_spinner()
         .with_prefix("[1/2]")
@@ -101,10 +107,43 @@ pub(crate) fn run_app(
     );
 
     let answer = analysis::analyse(repo, branches, recent)?;
-    answer.iter().for_each(|x| {
-        eprintln!("{}", x);
-    });
 
+    match output {
+        OutputType::Markdown => {
+            let table = tabled::Table::new(answer)
+                .with(tabled::settings::Style::markdown())
+                .to_string();
+            println!("{}", table);
+        }
+        OutputType::Table => {
+            let table = tabled::Table::new(answer).to_string();
+            println!("{}", table);
+        }
+        OutputType::Simple => {
+            answer.iter().for_each(|analysis_result| {
+                println!("{}", analysis_result);
+            });
+        }
+        OutputType::Json => {
+            if pretty == BooleanCLI::True {
+                println!("{}", serde_json::to_string_pretty(&answer)?);
+            } else {
+                println!("{}", serde_json::to_string(&answer)?);
+            }
+        }
+        OutputType::Interactive => {
+            answer.iter().for_each(|analysis_result| {
+                eprintln!("{}", analysis_result);
+            });
+            output_interactive(answer)?;
+        }
+    }
+
+    Ok(())
+}
+
+#[throws(eyre::Error)]
+fn output_interactive(answer: Vec<MergeAnalysisResult>) {
     // setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -128,8 +167,6 @@ pub(crate) fn run_app(
     if let Err(err) = res {
         eprintln!("{:?}", err)
     }
-
-    Ok(())
 }
 
 fn _run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> eyre::Result<()> {
