@@ -76,7 +76,9 @@ pub(crate) struct Args {
     /// Choices are `table`, `json` and `interactive`.
     ///
     /// - table - outputs a table with the results
+    /// 
     /// - json - outputs results in JSON format
+    /// 
     /// - interactive - outputs results in terminal UI
     pub output: OutputType,
 
