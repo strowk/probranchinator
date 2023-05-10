@@ -56,7 +56,7 @@ cargo install probranchinator
 ## Usage
 
 ```bash
-probranchinator.exe [OPTIONS] --remote <REMOTE> [BRANCHES]...
+probranchinator [OPTIONS] --remote <REMOTE> [BRANCHES]...
 ```
 
 Example:
