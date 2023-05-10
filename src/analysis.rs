@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::{fmt::Display, time::Duration};
 use tabled::Tabled;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub(crate) enum MergeAnalysisStatus {
     UpToDate,
     FastForward,
@@ -43,7 +43,7 @@ impl Display for MergeAnalysisStatus {
     }
 }
 
-#[derive(Serialize, Deserialize, Tabled)]
+#[derive(Serialize, Deserialize, Tabled, Debug)]
 pub(crate) struct MergeAnalysisResult {
     pub from_branch: String,
     pub to_branch: String,

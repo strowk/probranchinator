@@ -1,20 +1,10 @@
 use crate::repo::get_repo;
-use git2::Repository;
+use crate::tests::support::git::create_bare_repo;
 use std::env;
 use std::path::PathBuf;
-use tempfile::{tempdir, TempDir};
-
-fn create_bare_repo() -> Result<(TempDir, Repository), git2::Error> {
-    println!("Creating bare repository for testing in system temporary");
-    let tmp_dir = tempdir().map_err(|e| git2::Error::from_str(&format!("{}", e)))?;
-    let repo_path = tmp_dir.path().join("my-repo.git");
-    let repo = Repository::init_bare(&repo_path)?;
-    println!("Bare repo created at {:?}", repo_path);
-    Ok((tmp_dir, repo))
-}
 
 #[test]
-fn test_get_repo() -> Result<(), Box<dyn std::error::Error>> {
+fn test_get_repo() -> eyre::Result<()> {
     let (_tmp_dir, origin) = create_bare_repo()?;
     let remote_url = format!("file:///{}", PathBuf::from(origin.path()).display());
     println!("Using bare repo from {:?}", remote_url);
@@ -43,7 +33,7 @@ fn test_get_repo() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn test_delete_remote_branch() -> Result<(), Box<dyn std::error::Error>> {
+fn test_delete_remote_branch() -> eyre::Result<()> {
     let (_tmp_dir, origin) = create_bare_repo()?;
     let remote_url = format!("file:///{}", PathBuf::from(origin.path()).display());
     println!("Using bare repo from {:?}", remote_url);

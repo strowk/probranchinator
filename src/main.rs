@@ -15,5 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
+    mod analysis_test;
     mod repo_test;
+    mod support;
 }
