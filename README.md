@@ -4,6 +4,27 @@ This is a CLI tool that compares all branches in repository and displays how the
 
 ![Gif](./vhs/base.gif)
 
+## How it works
+
+0. It takes a remote repository URL from command line option
+1. (if necessary) Clones remote repository into temporary local repository
+2. Fetches all branches from remote and prunes deleted branches
+3. Compares selected branches with each other (either passed via CLI or most recently updated)
+4. Outputs result in terminal
+
+Tool compares branches with each other and shows each comparison in a table.
+Each entry in that table represents an attempt of merging one branch into another.
+You can receive one of the following results:
+
+- ✅✅ No changes: already up-to-date
+- 🚀✅ No confilcts: fast-forward merge is possible
+- 🤝✅ No conflicts: automatic merge is possible
+- 🚧🔧 Found conflicts, have to resolve them manually
+- ❌❌ No merge is possible (usually means your branches do not have common ancestor)
+- ❌🤔 Unknown merge analysis result (this is not supposed to happen really)
+
+Note that clone, fetch and prune operations currently require `git` CLI to be installed and available in `$PATH` due to compatibility with systems/protocols. Other operations work with cloned repository directly for efficiency. Tool creates temporary local repository in system temporary directory, because analysis of normal merge conflicts leaves working tree in a potentially 'dirty' state and we don't want to mess with user's repository, where unfinished work might be present.
+
 ## Installation
 
 Download a binary from [latest release](https://github.com/strowk/probranchinator/releases) and put it somewhere in your `$PATH`.
@@ -65,20 +86,20 @@ probranchinator --remote=https://gitlab.com/git-compose/git-compose.git --recent
 
 To exit the program, press `q` or `Ctrl+C`.
 
-## How it works
+### Output Format
 
-1. (if necessary) Clones remote repository into temporary local repository
-2. Fetches all branches from remote and prunes deleted branches
-3. Compares selected branches with each other (either passed via CLI or most recently updated)
-4. Outputs result in terminal
+By default, `probranchinator` outputs result in interactive format as a terminal UI.
 
-Tool compares branches with each other and shows each comparison in a table.
-Each entry in that table represents an attempt of merging one branch into another.
-You can receive one of the following results:
+You can also output result in JSON format by passing `--output=json` like this:
 
-- ✅✅ No changes: already up-to-date
-- 🚀✅ No confilcts: fast-forward merge is possible
-- 🤝✅ No conflicts: automatic merge is possible
-- 🚧🔧 Found conflicts, have to resolve them manually
-- ❌❌ No merge is possible (usually means your branches do not have common ancestor)
-- ❌🤔 Unknown merge analysis result (this is not supposed to happen really)
+```bash
+probranchinator --remote=https://github.com/strowk/probranchinator-test.git --output=json
+```
+
+By default output would be prettified, but you can pass `--pretty=false` to disable that.
+
+Other available formats are:
+
+- simple - outputs each analysis result in a single line
+- table - outputs result in a table format
+- markdown - outputs result as a markdown table
