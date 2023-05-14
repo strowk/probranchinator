@@ -18,4 +18,5 @@ mod tests {
     mod analysis_test;
     mod repo_test;
     mod support;
+    mod recent_test;
 }
