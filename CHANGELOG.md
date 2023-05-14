@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+### Fixed
+
+- Fixed incorrect order of recently updated branches retrieval.
+
 ## [v0.3.0] - 2023-05-09
 
 ### Added
