@@ -10,13 +10,27 @@ pub(crate) fn create_bare_repo() -> Result<(TempDir, Repository), git2::Error> {
     Ok((tmp_dir, repo))
 }
 
+pub(crate) fn create_repo() -> Result<(TempDir, Repository), git2::Error> {
+    println!("Creating bare repository for testing in system temporary");
+    let tmp_dir = tempdir().map_err(|e| git2::Error::from_str(&format!("{}", e)))?;
+    let repo_path = tmp_dir.path().join("my-repo.git");
+    let repo = Repository::init(&repo_path)?;
+    println!("Bare repo created at {:?}", repo_path);
+    Ok((tmp_dir, repo))
+}
+
 pub(crate) fn create_commit<'repo>(
     repo: &'repo Repository,
     message: &str,
     parents: &[&Commit],
     update_ref: Option<&str>,
+    index: Option<git2::Index>,
 ) -> Result<Commit<'repo>, git2::Error> {
-    let mut index = repo.index()?;
+    let mut index = if let Some(index) = index {
+        index
+    } else {
+        repo.index()?
+    };
     let oid = index.write_tree()?;
     let tree = repo.find_tree(oid)?;
     let sig = repo.signature()?;
@@ -37,6 +51,7 @@ pub(crate) fn create_branch_with_commit(
         message,
         &[&branch.get().peel_to_commit().unwrap()],
         Some(branch.get().name().unwrap()),
+        None,
     )?;
     Ok(())
 }
