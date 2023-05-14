@@ -1,7 +1,7 @@
 use eyre::{Context, Result};
 use git2::{BranchType, Repository};
 
-pub(crate) fn get_recent_branches(repo: &Repository, recent: usize) -> Result<Vec<String>> {
+pub(crate) fn get_recent_branches(repo: &Repository, limit: usize) -> Result<Vec<String>> {
     // firstly we collect all branches
     let mut branches = repo
         .branches(Some(BranchType::Remote))
@@ -39,12 +39,18 @@ pub(crate) fn get_recent_branches(repo: &Repository, recent: usize) -> Result<Ve
         .context("failed to read last commits of git branches")?;
 
     // then we sort them by last commit date, exiting on error
-    branches.sort_unstable_by_key(|(commit, _)| commit.committer().when());
+    branches.sort_unstable_by(|(commit_a, _), (commit_b, _)| {
+        // inverse cmp to get descending order
+        commit_b
+            .committer()
+            .when()
+            .cmp(&commit_a.committer().when())
+    });
 
     // returns branch names without "origin/" prefix
     Ok(branches
         .iter()
         .map(|(_, name)| name.replacen("origin/", "", 1))
-        .take(recent)
+        .take(limit)
         .collect())
 }
