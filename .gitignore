@@ -12,3 +12,6 @@
 /cross
 
 /docker-cache
+
+/tarpaulin-report.html
+/lcov.info

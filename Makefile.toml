@@ -10,6 +10,23 @@ args = [
     "./"
 ]
 
+[tasks.test-coverage]
+command = "docker"
+args = [
+    "run",
+    "--security-opt",
+    "seccomp=unconfined",
+    "--rm",
+    "-v", 
+    "${CARGO_MAKE_WORKING_DIRECTORY}:/volume",
+    "xd009642/tarpaulin", 
+    "bash", 
+    "-c",
+    """git config --global user.name 'Test Fella' \
+    && git config --global user.email 'justfortest@domain.example' \
+    && cargo tarpaulin"""
+]
+
 # Cross builds for linux, windows and mac
 
 [tasks.install-cross]
