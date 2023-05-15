@@ -64,7 +64,7 @@ Set Width 1800
 Set Height 1000
 
 Sleep 500ms
-Type "probranchinator --remote=https://github.com/strowk/probranchinator-test.git" Sleep 500ms  Enter
+Type "probranchinator --remote=https://github.com/strowk/probranchinator-test.git feature/1 develop feature/2 master feature/3 main" Sleep 500ms  Enter
 
 Sleep 1s
 Down

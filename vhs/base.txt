@@ -206,32 +206,8 @@
 
 
 ────────────────────────────────────────────────────────────────────────────────
-> probranchinator --remote=https://github.com/strowk/probranchinator-test.git
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-────────────────────────────────────────────────────────────────────────────────
-> probranchinator --remote=https://github.com/strowk/probranchinator-test.git
-
+> probranchinator --remote=https://github.com/strowk/probranchinator-test.git feature/1 develop f
+eature/2 master feature/3 main
 
 
 
@@ -254,10 +230,34 @@
 
 
 ────────────────────────────────────────────────────────────────────────────────
-> probranchinator --remote=https://github.com/strowk/probranchinator-test.git
+> probranchinator --remote=https://github.com/strowk/probranchinator-test.git feature/1 develop f
+eature/2 master feature/3 main
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+────────────────────────────────────────────────────────────────────────────────
+> probranchinator --remote=https://github.com/strowk/probranchinator-test.git feature/1 develop f
+eature/2 master feature/3 main
+Using repository cache at "/tmp/probranchinator/1d3a485bca0c2927" (cached: false)
+Cloning repository
 
 
 
@@ -283,22 +283,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -307,22 +307,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -331,22 +331,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -355,22 +355,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -379,22 +379,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -403,22 +403,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -427,22 +427,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -451,22 +451,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -475,22 +475,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -499,22 +499,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -523,22 +523,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -547,22 +547,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -571,22 +571,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -595,22 +595,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -619,22 +619,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -643,22 +643,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -667,22 +667,22 @@
  │Analysis Result                                              Branches                        │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> develop            │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/2          │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> master             │
+ │🤝 ✅  No conflicts: automatic merge is possible.              feature/1 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/1 -> main               │
  │🤝 ✅  No conflicts: automatic merge is possible.              develop -> feature/1            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/2            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> master               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         develop -> feature/3            │
  │❌ ❌  No merge is possible - no merge base found.             develop -> main                 │
  │🤝 ✅  No conflicts: automatic merge is possible.              feature/2 -> feature/1          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> master             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         feature/2 -> feature/3          │
  │❌ ❌  No merge is possible - no merge base found.             feature/2 -> main               │
- │🤝 ✅  No conflicts: automatic merge is possible.              feature/3 -> feature/1          │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> develop            │
- │🚧 🔧  Found conflicts, have to resolve them manually.         feature/3 -> feature/2          │
+ │🤝 ✅  No conflicts: automatic merge is possible.              master -> feature/1             │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> develop               │
+ │🚧 🔧  Found conflicts, have to resolve them manually.         master -> feature/2             │
  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 
 ────────────────────────────────────────────────────────────────────────────────
