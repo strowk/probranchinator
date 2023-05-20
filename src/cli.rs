@@ -88,3 +88,23 @@ pub(crate) struct Args {
     /// Only applicable to `json` output type.
     pub pretty: BooleanCLI,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_output_type_display() {
+        assert_eq!(OutputType::Table.to_string(), "table");
+        assert_eq!(OutputType::Markdown.to_string(), "markdown");
+        assert_eq!(OutputType::Simple.to_string(), "simple");
+        assert_eq!(OutputType::Json.to_string(), "json");
+        assert_eq!(OutputType::Interactive.to_string(), "interactive");
+    }
+
+    #[test]
+    fn test_boolean_cli_display() {
+        assert_eq!(BooleanCLI::True.to_string(), "true");
+        assert_eq!(BooleanCLI::False.to_string(), "false");
+    }
+}
