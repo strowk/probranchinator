@@ -1,6 +1,5 @@
 mod analysis;
 mod app;
-use std::error::Error;
 mod cli;
 mod clone;
 mod recent;
@@ -9,7 +8,7 @@ mod result;
 
 use clap::Parser;
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> eyre::Result<()> {
     let args = cli::Args::parse();
     return app::run_app(args);
 }

@@ -1,3 +1,9 @@
+use crate::{
+    analysis,
+    cli::{Args, BooleanCLI, OutputType},
+    repo::get_repo,
+    result::MergeAnalysisResult,
+};
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
     execute,
@@ -6,7 +12,6 @@ use crossterm::{
 use fehler::throws;
 use indicatif::{ProgressFinish, ProgressStyle};
 use std::{
-    error::Error,
     io,
     sync::{
         atomic::{AtomicBool, Ordering},
@@ -21,13 +26,6 @@ use tui::{
     text::{Span, Spans},
     widgets::{Block, Borders, Cell, Row, Table, TableState},
     Frame, Terminal,
-};
-
-use crate::{
-    analysis,
-    cli::{Args, BooleanCLI, OutputType},
-    repo::get_repo,
-    result::MergeAnalysisResult,
 };
 
 struct App {
@@ -85,7 +83,7 @@ pub(crate) fn run_app(
         output,
         pretty,
     }: Args,
-) -> Result<(), Box<dyn Error>> {
+) -> eyre::Result<()> {
     let spinner = indicatif::ProgressBar::new_spinner()
         .with_prefix("[1/2]")
         .with_message("Retrieving repository...")
