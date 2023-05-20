@@ -1,4 +1,6 @@
+use crate::analysis::analyse;
 use crate::repo::get_repo;
+use crate::result::MergeAnalysisStatus;
 use crate::tests::support::git::{
     assert_result, create_bare_repo, create_branch, create_branch_with_commit, create_commit,
     create_repo,
@@ -32,7 +34,7 @@ fn test_analysis_one_branch() -> eyre::Result<()> {
     assert!(cloned_repo.path().starts_with(env::temp_dir()));
 
     // Run analysis
-    let result = crate::analysis::analyse(cloned_repo, vec![], 2)?;
+    let result = analyse(cloned_repo, vec![], 2)?;
 
     // As there is only one branch, we expect no results, since there is nothing to merge
     assert_eq!(result.len(), 0);
@@ -59,7 +61,7 @@ fn test_analysis_up_to_date_and_fast_forward() -> eyre::Result<()> {
     let (cloned_repo, _, _) = get_repo(&remote_url)?;
 
     // Run analysis with 2 recent branches
-    let result = crate::analysis::analyse(cloned_repo, vec![], 2)?;
+    let result = analyse(cloned_repo, vec![], 2)?;
 
     // With two branches we expect two results
     assert_eq!(result.len(), 2);
@@ -70,7 +72,7 @@ fn test_analysis_up_to_date_and_fast_forward() -> eyre::Result<()> {
         &result,
         "master",
         branch_name,
-        crate::analysis::MergeAnalysisStatus::UpToDate,
+        MergeAnalysisStatus::UpToDate,
     );
 
     // Merging test-branch to master should be a fast-forward
@@ -80,7 +82,7 @@ fn test_analysis_up_to_date_and_fast_forward() -> eyre::Result<()> {
         &result,
         branch_name,
         "master",
-        crate::analysis::MergeAnalysisStatus::FastForward,
+        MergeAnalysisStatus::FastForward,
     );
 
     Ok(())
@@ -106,7 +108,7 @@ fn test_analysis_unrelated_branches() -> eyre::Result<()> {
     let (cloned_repo, _, _) = get_repo(&remote_url)?;
 
     // Run analysis specifically with the test-branch and master
-    let result = crate::analysis::analyse(
+    let result = analyse(
         cloned_repo,
         vec![branch_name.to_string(), "master".to_string()],
         0,
@@ -117,7 +119,7 @@ fn test_analysis_unrelated_branches() -> eyre::Result<()> {
         &result,
         "master",
         branch_name,
-        crate::analysis::MergeAnalysisStatus::Error {
+        MergeAnalysisStatus::Error {
             message: "no merge base found".to_string(),
         },
     );
@@ -125,7 +127,7 @@ fn test_analysis_unrelated_branches() -> eyre::Result<()> {
         &result,
         branch_name,
         "master",
-        crate::analysis::MergeAnalysisStatus::Error {
+        MergeAnalysisStatus::Error {
             message: "no merge base found".to_string(),
         },
     );
@@ -194,25 +196,15 @@ fn test_analysis_normal_merge_no_conflicts() -> eyre::Result<()> {
     println!("Cloned repo at {:?}", cloned_repo.path());
 
     // Run analysis specifically with the test-branch and master
-    let result = crate::analysis::analyse(
+    let result = analyse(
         cloned_repo,
         vec![branch_name.to_string(), "master".to_string()],
         0,
     )?;
 
     // Check that master can be normally merged to test-branch and vice versa
-    assert_result(
-        &result,
-        "master",
-        branch_name,
-        crate::analysis::MergeAnalysisStatus::Normal,
-    );
-    assert_result(
-        &result,
-        branch_name,
-        "master",
-        crate::analysis::MergeAnalysisStatus::Normal,
-    );
+    assert_result(&result, "master", branch_name, MergeAnalysisStatus::Normal);
+    assert_result(&result, branch_name, "master", MergeAnalysisStatus::Normal);
 
     Ok(())
 }
@@ -241,7 +233,7 @@ fn test_analysis_normal_merge_with_conflicts() -> eyre::Result<()> {
     println!("Cloned repo at {:?}", cloned_repo.path());
 
     // Run analysis specifically with the test-branch and master
-    let result = crate::analysis::analyse(
+    let result = analyse(
         cloned_repo,
         vec![branch_name.to_string(), "master".to_string()],
         0,
@@ -252,13 +244,13 @@ fn test_analysis_normal_merge_with_conflicts() -> eyre::Result<()> {
         &result,
         "master",
         branch_name,
-        crate::analysis::MergeAnalysisStatus::Conflicts,
+        MergeAnalysisStatus::Conflicts,
     );
     assert_result(
         &result,
         branch_name,
         "master",
-        crate::analysis::MergeAnalysisStatus::Conflicts,
+        MergeAnalysisStatus::Conflicts,
     );
 
     Ok(())

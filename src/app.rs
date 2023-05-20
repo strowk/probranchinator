@@ -24,9 +24,10 @@ use tui::{
 };
 
 use crate::{
-    analysis::{self, MergeAnalysisResult},
+    analysis,
     cli::{Args, BooleanCLI, OutputType},
     repo::get_repo,
+    result::MergeAnalysisResult,
 };
 
 struct App {

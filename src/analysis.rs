@@ -1,64 +1,11 @@
-use crate::recent::get_recent_branches;
+use crate::{
+    recent::get_recent_branches,
+    result::{MergeAnalysisResult, MergeAnalysisStatus},
+};
 use eyre::Result;
 use git2::Repository;
 use indicatif::ProgressStyle;
-use serde::{Deserialize, Serialize};
-use std::{fmt::Display, time::Duration};
-use tabled::Tabled;
-
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub(crate) enum MergeAnalysisStatus {
-    UpToDate,
-    FastForward,
-    None,
-    Error { message: String },
-    Normal,
-    Unknown,
-    Conflicts,
-}
-
-impl Display for MergeAnalysisStatus {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            MergeAnalysisStatus::UpToDate => {
-                write!(f, "✅✅ No changes: already up-to-date.")
-            }
-            MergeAnalysisStatus::FastForward => {
-                write!(f, "🚀✅ No confilcts: fast-forward merge is possible.")
-            }
-            MergeAnalysisStatus::None => {
-                write!(f, "❌❌ No merge is possible - analysis gave none.")
-            }
-            MergeAnalysisStatus::Error { message } => {
-                write!(f, "❌❌ No merge is possible - {}.", message)
-            }
-            MergeAnalysisStatus::Unknown => write!(f, "❌🤔 Unknown merge analysis result."),
-            MergeAnalysisStatus::Conflicts => {
-                write!(f, "🚧🔧 Found conflicts, have to resolve them manually.")
-            }
-            MergeAnalysisStatus::Normal => {
-                write!(f, "🤝✅ No conflicts: automatic merge is possible.")
-            }
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Tabled, Debug)]
-pub(crate) struct MergeAnalysisResult {
-    pub from_branch: String,
-    pub to_branch: String,
-    pub status: MergeAnalysisStatus,
-}
-
-impl Display for MergeAnalysisResult {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(
-            f,
-            "{} -> {} : {}",
-            self.from_branch, self.to_branch, self.status
-        )
-    }
-}
+use std::time::Duration;
 
 pub(crate) fn analyse(
     repo: Repository,

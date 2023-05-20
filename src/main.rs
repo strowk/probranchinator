@@ -5,6 +5,7 @@ mod cli;
 mod clone;
 mod recent;
 mod repo;
+mod result;
 
 use clap::Parser;
 
@@ -16,7 +17,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     mod analysis_test;
+    mod recent_test;
     mod repo_test;
     mod support;
-    mod recent_test;
 }

@@ -70,10 +70,10 @@ pub(crate) fn create_branch<'repo>(
 }
 
 pub(crate) fn assert_result(
-    result: &Vec<crate::analysis::MergeAnalysisResult>,
+    result: &Vec<crate::result::MergeAnalysisResult>,
     from_branch: &str,
     to_branch: &str,
-    expected_status: crate::analysis::MergeAnalysisStatus,
+    expected_status: crate::result::MergeAnalysisStatus,
 ) {
     let found_matching: u32 = result
         .iter()
