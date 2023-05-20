@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+### Changed
+
+- Modified log output using with levels and colors when enabled (using env_logger).
+
 ## [v0.3.1] - 2023-05-14
 
 ### Fixed
