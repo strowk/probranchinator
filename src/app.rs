@@ -100,7 +100,7 @@ pub(crate) fn run_app(
 
     spinner.finish();
 
-    eprintln!(
+    log::info!(
         "Using repository cache at {:?} (cached: {})",
         tmp_path, have_cached_repo
     );
@@ -132,7 +132,7 @@ pub(crate) fn run_app(
         }
         OutputType::Interactive => {
             answer.iter().for_each(|analysis_result| {
-                eprintln!("{}", analysis_result);
+                log::info!("{}", analysis_result);
             });
             output_interactive(answer)?;
         }
@@ -164,7 +164,7 @@ fn output_interactive(answer: Vec<MergeAnalysisResult>) {
     terminal.show_cursor()?;
 
     if let Err(err) = res {
-        eprintln!("{:?}", err)
+        log::error!("{:?}", err)
     }
 }
 

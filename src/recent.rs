@@ -17,14 +17,14 @@ pub(crate) fn get_recent_branches(repo: &Repository, limit: usize) -> Result<Vec
                 Some((branch, name))
             }
             Err(e) => {
-                eprintln!(
+                log::error!(
                     "Error getting one of branches name, skip that branch {:?}",
                     e
                 );
                 None
             }
             Ok(None) => {
-                eprintln!("Error getting one of branches name, skip that branch");
+                log::error!("Error getting one of branches name, skip that branch");
                 None
             }
         })
