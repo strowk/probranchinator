@@ -248,3 +248,36 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .widths(&[Constraint::Length(60), Constraint::Percentage(50)]);
     f.render_stateful_widget(t, rects[0], &mut app.state);
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::result::MergeAnalysisStatus;
+
+    #[test]
+    fn test_app_next_previous() {
+        use super::*;
+        let mut app = App::new(vec![
+            MergeAnalysisResult {
+                status: MergeAnalysisStatus::UpToDate,
+                from_branch: "feature".to_string(),
+                to_branch: "master".to_string(),
+            },
+            MergeAnalysisResult {
+                status: MergeAnalysisStatus::FastForward,
+                from_branch: "master".to_string(),
+                to_branch: "feature".to_string(),
+            },
+        ]);
+        assert_eq!(app.state.selected(), None);
+        app.next();
+        assert_eq!(app.state.selected(), Some(0));
+        app.next();
+        assert_eq!(app.state.selected(), Some(1));
+        app.next();
+        assert_eq!(app.state.selected(), Some(0));
+        app.previous();
+        assert_eq!(app.state.selected(), Some(1));
+        app.previous();
+        assert_eq!(app.state.selected(), Some(0));
+    }
+}
