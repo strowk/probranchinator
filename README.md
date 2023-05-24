@@ -92,8 +92,21 @@ By default, `probranchinator` outputs result in interactive format as a terminal
 
 You can also output result in JSON format by passing `--output=json` like this:
 
-```bash
-probranchinator --remote=https://github.com/strowk/probranchinator-test.git --output=json
+```console
+$ probranchinator --remote=https://github.com/strowk/probranchinator-test.git --output=json master feature/1
+[
+  {
+    "from_branch": "master",
+    "to_branch": "feature/1",
+    "status": "Normal"
+  },
+  {
+    "from_branch": "feature/1",
+    "to_branch": "master",
+    "status": "Normal"
+  }
+]
+
 ```
 
 By default output would be prettified, but you can pass `--pretty=false` to disable that.
@@ -103,3 +116,55 @@ Other available formats are:
 - simple - outputs each analysis result in a single line
 - table - outputs result in a table format
 - markdown - outputs result as a markdown table
+
+Examples:
+
+```console
+$ probranchinator --remote=https://github.com/strowk/probranchinator-test.git --output=simple master feature/1 feature/2 main
+master -> feature/1 : 🤝✅ No conflicts: automatic merge is possible.
+master -> feature/2 : 🚧🔧 Found conflicts, have to resolve them manually.
+master -> main : ❌❌ No merge is possible - no merge base found.
+feature/1 -> master : 🤝✅ No conflicts: automatic merge is possible.
+feature/1 -> feature/2 : 🤝✅ No conflicts: automatic merge is possible.
+feature/1 -> main : ❌❌ No merge is possible - no merge base found.
+feature/2 -> master : 🚧🔧 Found conflicts, have to resolve them manually.
+feature/2 -> feature/1 : 🤝✅ No conflicts: automatic merge is possible.
+feature/2 -> main : ❌❌ No merge is possible - no merge base found.
+main -> master : ❌❌ No merge is possible - no merge base found.
+main -> feature/1 : ❌❌ No merge is possible - no merge base found.
+main -> feature/2 : ❌❌ No merge is possible - no merge base found.
+
+```
+
+```console
+$ probranchinator --remote=https://github.com/strowk/probranchinator-test.git --output=table master feature/1 main
++-------------+-----------+--------------------------------------------------+
+| from_branch | to_branch | status                                           |
++-------------+-----------+--------------------------------------------------+
+| master      | feature/1 | 🤝✅ No conflicts: automatic merge is possible.  |
++-------------+-----------+--------------------------------------------------+
+| master      | main      | ❌❌ No merge is possible - no merge base found. |
++-------------+-----------+--------------------------------------------------+
+| feature/1   | master    | 🤝✅ No conflicts: automatic merge is possible.  |
++-------------+-----------+--------------------------------------------------+
+| feature/1   | main      | ❌❌ No merge is possible - no merge base found. |
++-------------+-----------+--------------------------------------------------+
+| main        | master    | ❌❌ No merge is possible - no merge base found. |
++-------------+-----------+--------------------------------------------------+
+| main        | feature/1 | ❌❌ No merge is possible - no merge base found. |
++-------------+-----------+--------------------------------------------------+
+
+```
+
+```console
+$ probranchinator --remote=https://github.com/strowk/probranchinator-test.git --output=markdown master feature/1 main
+| from_branch | to_branch | status                                           |
+|-------------|-----------|--------------------------------------------------|
+| master      | feature/1 | 🤝✅ No conflicts: automatic merge is possible.  |
+| master      | main      | ❌❌ No merge is possible - no merge base found. |
+| feature/1   | master    | 🤝✅ No conflicts: automatic merge is possible.  |
+| feature/1   | main      | ❌❌ No merge is possible - no merge base found. |
+| main        | master    | ❌❌ No merge is possible - no merge base found. |
+| main        | feature/1 | ❌❌ No merge is possible - no merge base found. |
+
+```
