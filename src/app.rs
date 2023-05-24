@@ -75,7 +75,7 @@ impl App {
     }
 }
 
-pub(crate) fn run_app(
+pub(crate) fn run_probranchinator(
     Args {
         remote,
         branches,
@@ -153,7 +153,7 @@ fn output_interactive(answer: Vec<MergeAnalysisResult>) {
 
     // create app and run it
     let app = App::new(answer);
-    let res = _run_app(&mut terminal, app);
+    let res = run_app(&mut terminal, app);
 
     // restore terminal
     disable_raw_mode()?;
@@ -169,7 +169,7 @@ fn output_interactive(answer: Vec<MergeAnalysisResult>) {
     }
 }
 
-fn _run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> eyre::Result<()> {
+fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> eyre::Result<()> {
     let received_sigint = Arc::new(AtomicBool::new(false));
     let sigint_reading = received_sigint.clone();
     ctrlc::set_handler(move || {

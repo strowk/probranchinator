@@ -11,7 +11,7 @@ use clap::Parser;
 fn main() -> eyre::Result<()> {
     env_logger::init();
     let args = cli::Args::parse();
-    return app::run_app(args);
+    return app::run_probranchinator(args);
 }
 
 #[cfg(test)]
