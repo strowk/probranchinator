@@ -24,82 +24,16 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<(Repository, PathBuf, bool)> 
 
     let have_cached_repo = tmp_path.is_dir();
 
-    let repo = if have_cached_repo {
-        // If the folder already exists, open the repository in it
-        Repository::open(&tmp_path).with_context(|| {
-            format!(
-                "Failed to open repository in directory {:?}",
-                tmp_path.display()
-            )
-        })?
-    } else {
-        // Otherwise, clone the repository to the new folder
-
+    if !have_cached_repo {
         // currently all kinds of clones via git2-rs or gitoxide
         // are in various states of being broken either on certain
         // repositories or on certain platforms:
         // git2 cannot be built for macos because it needs openssl and cross does not provide
         // also git2 cannot deal with SSH at the moment on windows
         // gitoxide fails on some random repositories with "not supported" errors
-        // hece we use the git command line tool for now only for cloning
+        // hence we use the git command line tool for now only for cloning
         clone_repo(remote_url, &tmp_path)?;
-
-        // and then we assume it was cloned Ok and just open it
-
-        Repository::open(&tmp_path).with_context(|| {
-            format!(
-                "Failed to open repository in directory {:?}",
-                tmp_path.display()
-            )
-        })?
-
-        // this was attempt to use git2-rs for cloning, could not build it for darwin ATM
-
-        // Repository::clone(remote_url, &tmp_path).with_context(|| {
-        //     format!(
-        //         "Failed to clone repository from {:?} to {:?}",
-        //         remote_url,
-        //         tmp_path.display()
-        //     )
-        // })?
-
-        // Using more complex clone options to allow for SSH authentication
-        // It is broken at the moment on Windows, see
-        // https://github.com/rust-lang/git2-rs/issues/937
-
-        // let mut callbacks = RemoteCallbacks::new();
-        // callbacks.credentials(|_url, username_from_url, _allowed_types| {
-        //     Cred::ssh_key(
-        //         username_from_url.unwrap(),
-        //         None,
-        //         Path::new(&format!("{}/.ssh/id_rsa", env::var("HOME").unwrap())),
-        //         None,
-        //     )
-        // });
-
-        // // Prepare fetch options.
-        // let mut fo = git2::FetchOptions::new();
-        // fo.remote_callbacks(callbacks);
-
-        // // Prepare builder.
-        // let mut builder = git2::build::RepoBuilder::new();
-        // builder.fetch_options(fo);
-
-        // // Clone the project.
-        // builder.clone(remote_url, &tmp_path).with_context(|| {
-        //     format!(
-        //         "Failed to clone repository from {:?} to {:?}",
-        //         remote_url,
-        //         tmp_path.display()
-        //     )
-        // })?
-    };
-
-    if have_cached_repo {
-        // let mut remote = repo.find_remote("origin")?;
-        // let mut fetch_options = git2::FetchOptions::new();
-        // remote.fetch::<String>(&[], Some(&mut fetch_options), None)?;
-
+    } else {
         // fetch using git command line tool
         // again this is due to none of libraries being able to properly fetch on all platforms
         let mut cmd = std::process::Command::new("git");
@@ -111,10 +45,6 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<(Repository, PathBuf, bool)> 
         if !output.status.success() {
             eyre::bail!("Failed to fetch repository");
         }
-
-        // this does not work, apparently due to some git2 problem
-        // let mut remote = repo.find_remote("origin")?;
-        // remote.prune(None)?;
 
         // then prune all branches that are not on origin anymore
         // also using git command line tool, because git2-rs
@@ -132,6 +62,13 @@ pub(crate) fn get_repo(remote_url: &str) -> Result<(Repository, PathBuf, bool)> 
             eyre::bail!("Failed to prune repository");
         }
     }
+
+    let repo = Repository::open(&tmp_path).with_context(|| {
+        format!(
+            "Failed to open repository in directory {:?}",
+            tmp_path.display()
+        )
+    })?;
 
     Ok((repo, tmp_path, have_cached_repo))
 }
