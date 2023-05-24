@@ -102,7 +102,8 @@ pub(crate) fn run_app(
 
     log::info!(
         "Using repository cache at {:?} (cached: {})",
-        tmp_path, have_cached_repo
+        tmp_path,
+        have_cached_repo
     );
 
     let answer = analysis::analyse(repo, branches, recent)?;
@@ -252,6 +253,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
 #[cfg(test)]
 mod tests {
     use crate::result::MergeAnalysisStatus;
+    use tui::buffer::Buffer;
 
     #[test]
     fn test_app_next_previous() {
@@ -279,5 +281,97 @@ mod tests {
         assert_eq!(app.state.selected(), Some(1));
         app.previous();
         assert_eq!(app.state.selected(), Some(0));
+    }
+
+    #[test]
+    fn test_app_next_previous_empty() {
+        use super::*;
+        let mut app = App::new(vec![]);
+        assert_eq!(app.state.selected(), None);
+        app.next();
+        assert_eq!(app.state.selected(), None);
+        app.previous();
+        assert_eq!(app.state.selected(), None);
+    }
+
+    #[test]
+    fn test_ui() {
+        use super::*;
+        use tui::backend::TestBackend;
+
+        let mut app = App::new(vec![
+            MergeAnalysisResult {
+                status: MergeAnalysisStatus::UpToDate,
+                from_branch: "feature".to_string(),
+                to_branch: "master".to_string(),
+            },
+            MergeAnalysisResult {
+                status: MergeAnalysisStatus::FastForward,
+                from_branch: "master".to_string(),
+                to_branch: "feature".to_string(),
+            },
+        ]);
+
+        let backend = TestBackend::new(90, 7);
+        let mut terminal = Terminal::new(backend).unwrap();
+        terminal
+            .draw(|f| ui(f, &mut app))
+            .expect("Failed to draw UI");
+
+        let mut expected = Buffer::with_lines(vec![
+            "                                                                                          ",
+            " ┌Merge Analysis────────────────────────────────────────────────────────────────────────┐ ",
+            " │Analysis Result                                              Merging Branches         │ ",
+            " │✅✅ No changes: already up-to-date.                         feature -> master        │ " ,
+            " │🚀✅ No confilcts: fast-forward merge is possible.           master -> feature        │ ",
+            " └──────────────────────────────────────────────────────────────────────────────────────┘ ",
+            "                                                                                          "
+          ]);
+
+        // set blue style to table header
+
+        for x in 2..62 {
+            expected
+                .get_mut(x, 2)
+                .set_style(Style::default().bg(Color::Blue).fg(Color::Red));
+        }
+
+        expected
+            .get_mut(62, 2)
+            .set_style(Style::default().bg(Color::Blue));
+
+        for x in 63..88 {
+            expected
+                .get_mut(x, 2)
+                .set_style(Style::default().bg(Color::Blue).fg(Color::Red));
+        }
+
+        // set bold style to branch names
+
+        for x in 63..70 {
+            expected
+                .get_mut(x, 3)
+                .set_style(Style::default().add_modifier(Modifier::BOLD));
+        }
+
+        for x in 74..80 {
+            expected
+                .get_mut(x, 3)
+                .set_style(Style::default().add_modifier(Modifier::BOLD));
+        }
+
+        for x in 63..69 {
+            expected
+                .get_mut(x, 4)
+                .set_style(Style::default().add_modifier(Modifier::BOLD));
+        }
+
+        for x in 73..80 {
+            expected
+                .get_mut(x, 4)
+                .set_style(Style::default().add_modifier(Modifier::BOLD));
+        }
+
+        terminal.backend().assert_buffer(&expected);
     }
 }

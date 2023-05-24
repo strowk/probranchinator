@@ -1,5 +1,5 @@
 [probranchinator-all]
-fail-under = 50
+fail-under = 65
 exclude-files = ["cross/*", "testrepo/*"]
 locked = true
 
