@@ -24,6 +24,7 @@ args = [
     "-c",
     """git config --global user.name 'Test Fella' \
     && git config --global user.email 'justfortest@domain.example' \
+    && git config --global --add safe.directory /volume \
     && cargo tarpaulin"""
 ]
 
