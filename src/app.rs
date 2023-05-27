@@ -1,7 +1,5 @@
 use crate::{
-    analysis,
     cli::{Args, BooleanCLI, OutputType},
-    repo::get_repo,
     result::MergeAnalysisResult,
 };
 use crossterm::{
@@ -10,6 +8,7 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use fehler::throws;
+use git2::Repository;
 use indicatif::{ProgressFinish, ProgressStyle};
 use std::{
     io,
@@ -75,7 +74,25 @@ impl App {
     }
 }
 
-pub(crate) fn run_probranchinator(
+#[cfg(test)]
+use mockall::automock;
+
+#[cfg_attr(test, automock)]
+pub(crate) trait Analyzer {
+    fn analyse(
+        &self,
+        repo: Repository,
+        branches: Vec<String>,
+        recent: usize,
+    ) -> eyre::Result<Vec<MergeAnalysisResult>>;
+}
+
+#[cfg_attr(test, automock)]
+pub(crate) trait Repo {
+    fn get_repo(&self, remote: &str) -> eyre::Result<(Repository, std::path::PathBuf, bool)>;
+}
+
+pub(crate) fn run_probranchinator<A: Analyzer, R: Repo>(
     Args {
         remote,
         branches,
@@ -83,6 +100,9 @@ pub(crate) fn run_probranchinator(
         output,
         pretty,
     }: Args,
+    stdout: &mut dyn std::io::Write,
+    analyzer: &A,
+    repo: &R,
 ) -> eyre::Result<()> {
     let spinner = indicatif::ProgressBar::new_spinner()
         .with_prefix("[1/2]")
@@ -92,7 +112,7 @@ pub(crate) fn run_probranchinator(
             "{prefix:.cyan/blue} {spinner} {msg}",
         )?);
     spinner.enable_steady_tick(Duration::from_millis(100));
-    let (repo, tmp_path, have_cached_repo) = get_repo(&remote)?;
+    let (repo, tmp_path, have_cached_repo) = repo.get_repo(&remote)?;
 
     spinner.set_style(ProgressStyle::with_template(
         "Retrieved repository in {elapsed}",
@@ -106,29 +126,33 @@ pub(crate) fn run_probranchinator(
         have_cached_repo
     );
 
-    let answer = analysis::analyse(repo, branches, recent)?;
+    let answer = analyzer.analyse(repo, branches, recent)?;
 
     match output {
         OutputType::Markdown => {
             let table = tabled::Table::new(answer)
                 .with(tabled::settings::Style::markdown())
                 .to_string();
-            println!("{}", table);
+            writeln!(stdout, "{}", table)?;
         }
         OutputType::Table => {
             let table = tabled::Table::new(answer).to_string();
-            println!("{}", table);
+            writeln!(stdout, "{}", table)?;
         }
         OutputType::Simple => {
-            answer.iter().for_each(|analysis_result| {
-                println!("{}", analysis_result);
-            });
+            answer
+                .iter()
+                .map(|analysis_result| {
+                    writeln!(stdout, "{}", analysis_result)?;
+                    Ok(())
+                })
+                .collect::<std::io::Result<Vec<_>>>()?;
         }
         OutputType::Json => {
             if pretty == BooleanCLI::True {
-                println!("{}", serde_json::to_string_pretty(&answer)?);
+                writeln!(stdout, "{}", serde_json::to_string_pretty(&answer)?)?;
             } else {
-                println!("{}", serde_json::to_string(&answer)?);
+                writeln!(stdout, "{}", serde_json::to_string(&answer)?)?;
             }
         }
         OutputType::Interactive => {
@@ -252,9 +276,16 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
 
 #[cfg(test)]
 mod tests {
-    use crate::result::MergeAnalysisStatus;
+
+    use crate::{
+        app::MockAnalyzer,
+        cli::Args,
+        result::{MergeAnalysisResult, MergeAnalysisStatus},
+    };
+    use serde_json::json;
     use tui::buffer::Buffer;
 
+    use super::{run_probranchinator, MockRepo};
     #[test]
     fn test_app_next_previous() {
         use super::*;
@@ -373,5 +404,69 @@ mod tests {
         }
 
         terminal.backend().assert_buffer(&expected);
+    }
+
+    #[test]
+    fn test_run_probranchinator_json() -> Result<(), Box<dyn std::error::Error>> {
+        // prepare io::Write buffer
+        let mut buf = Vec::new();
+
+        let mut mock_analyzer = MockAnalyzer::new();
+        mock_analyzer.expect_analyse().returning(|_, _, _| {
+            Ok(vec![
+                MergeAnalysisResult {
+                    status: MergeAnalysisStatus::UpToDate,
+                    from_branch: "feature".to_string(),
+                    to_branch: "master".to_string(),
+                },
+                MergeAnalysisResult {
+                    status: MergeAnalysisStatus::FastForward,
+                    from_branch: "master".to_string(),
+                    to_branch: "feature".to_string(),
+                },
+            ])
+        });
+        let mut mock_repo = MockRepo::new();
+        mock_repo.expect_get_repo().returning(|_| {
+            Ok((
+                git2::Repository::open_from_env().unwrap(),
+                "master".to_string().into(),
+                false,
+            ))
+        });
+
+        // // call run_probranchinator with mocked app and buffer io::Write
+        run_probranchinator(
+            Args {
+                output: crate::cli::OutputType::Json,
+                remote: "".to_string(),
+                branches: vec![],
+                pretty: crate::cli::BooleanCLI::False,
+                recent: 0,
+            },
+            &mut buf,
+            &mock_analyzer,
+            &mock_repo,
+        )?;
+
+        // // check if output is valid json with empty array
+        let json = String::from_utf8(buf).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&json).unwrap();
+        let expected = json!([
+            {
+                "status": "UpToDate",
+                "from_branch": "feature",
+                "to_branch": "master"
+            },
+            {
+                "status": "FastForward",
+                "from_branch": "master",
+                "to_branch": "feature"
+            }
+        ]);
+        assert_eq!(parsed.as_array().unwrap().len(), 2);
+        assert_eq!(parsed, expected);
+
+        Ok(())
     }
 }

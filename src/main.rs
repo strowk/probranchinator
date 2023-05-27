@@ -11,8 +11,16 @@ use clap::Parser;
 fn main() -> eyre::Result<()> {
     env_logger::init();
     let args = cli::Args::parse();
-    return app::run_probranchinator(args);
+    let probranchinator = Probranchinator {};
+    return app::run_probranchinator(
+        args,
+        &mut std::io::stdout(),
+        &probranchinator,
+        &probranchinator,
+    );
 }
+
+pub(crate) struct Probranchinator {}
 
 #[cfg(test)]
 mod tests {

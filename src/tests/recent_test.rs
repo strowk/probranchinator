@@ -1,9 +1,11 @@
 use std::path::PathBuf;
 
-use crate::{recent, repo::get_repo, tests::support};
+use crate::{app::Repo, recent, tests::support};
 
 #[test]
 fn test_recent() -> eyre::Result<()> {
+    let probrahcninator = crate::Probranchinator {};
+
     let (_tmp_dir, origin) = support::git::create_bare_repo()?;
 
     let remote_url = format!("file:///{}", PathBuf::from(origin.path()).display());
@@ -22,7 +24,7 @@ fn test_recent() -> eyre::Result<()> {
     support::git::create_branch_with_commit(&origin, branch_name, "first commit", None)?;
 
     // Clone the repository
-    let (cloned_repo, _, _) = get_repo(&remote_url)?;
+    let (cloned_repo, _, _) = probrahcninator.get_repo(&remote_url)?;
 
     // Get recent branches
     let recent_branches = recent::get_recent_branches(&cloned_repo, 2)?;
