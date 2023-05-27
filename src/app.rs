@@ -282,6 +282,7 @@ mod tests {
         cli::Args,
         result::{MergeAnalysisResult, MergeAnalysisStatus},
     };
+    use pretty_assertions::assert_eq;
     use serde_json::json;
     use tui::buffer::Buffer;
 
@@ -407,35 +408,118 @@ mod tests {
     }
 
     #[test]
-    fn test_run_probranchinator_json() -> Result<(), Box<dyn std::error::Error>> {
-        // prepare io::Write buffer
+    fn test_run_probranchinator_table() -> Result<(), Box<dyn std::error::Error>> {
         let mut buf = Vec::new();
+        let mock_analyzer = two_branches_analyzer();
+        let mock_repo = this_repository();
 
-        let mut mock_analyzer = MockAnalyzer::new();
-        mock_analyzer.expect_analyse().returning(|_, _, _| {
-            Ok(vec![
-                MergeAnalysisResult {
-                    status: MergeAnalysisStatus::UpToDate,
-                    from_branch: "feature".to_string(),
-                    to_branch: "master".to_string(),
-                },
-                MergeAnalysisResult {
-                    status: MergeAnalysisStatus::FastForward,
-                    from_branch: "master".to_string(),
-                    to_branch: "feature".to_string(),
-                },
-            ])
-        });
-        let mut mock_repo = MockRepo::new();
-        mock_repo.expect_get_repo().returning(|_| {
-            Ok((
-                git2::Repository::open_from_env().unwrap(),
-                "master".to_string().into(),
-                false,
-            ))
-        });
+        // // call run_probranchinator with mocks and buffer
+        run_probranchinator(
+            Args {
+                output: crate::cli::OutputType::Table,
+                remote: "".to_string(),
+                branches: vec![],
+                pretty: crate::cli::BooleanCLI::False,
+                recent: 0,
+            },
+            &mut buf,
+            &mock_analyzer,
+            &mock_repo,
+        )?;
 
-        // // call run_probranchinator with mocked app and buffer io::Write
+        // // check if output is text table with two analysis results
+        let text = String::from_utf8(buf).unwrap();
+        let expected = r#"
++-------------+-----------+----------------------------------------------------+
+| from_branch | to_branch | status                                             |
++-------------+-----------+----------------------------------------------------+
+| feature     | master    | ✅✅ No changes: already up-to-date.               |
++-------------+-----------+----------------------------------------------------+
+| master      | feature   | 🚀✅ No confilcts: fast-forward merge is possible. |
++-------------+-----------+----------------------------------------------------+
+"#
+        .trim_start();
+
+        assert_eq!(text, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_run_probranchinator_markdown() -> Result<(), Box<dyn std::error::Error>> {
+        let mut buf = Vec::new();
+        let mock_analyzer = two_branches_analyzer();
+        let mock_repo = this_repository();
+
+        // // call run_probranchinator with mocks and buffer
+        run_probranchinator(
+            Args {
+                output: crate::cli::OutputType::Markdown,
+                remote: "".to_string(),
+                branches: vec![],
+                pretty: crate::cli::BooleanCLI::False,
+                recent: 0,
+            },
+            &mut buf,
+            &mock_analyzer,
+            &mock_repo,
+        )?;
+
+        // // check if output is text table with two analysis results
+        let text = String::from_utf8(buf).unwrap();
+        let expected = r#"
+| from_branch | to_branch | status                                             |
+|-------------|-----------|----------------------------------------------------|
+| feature     | master    | ✅✅ No changes: already up-to-date.               |
+| master      | feature   | 🚀✅ No confilcts: fast-forward merge is possible. |
+"#
+        .trim_start();
+
+        assert_eq!(text, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_run_probranchinator_simple() -> Result<(), Box<dyn std::error::Error>> {
+        let mut buf = Vec::new();
+        let mock_analyzer = two_branches_analyzer();
+        let mock_repo = this_repository();
+
+        // // call run_probranchinator with mocks and buffer
+        run_probranchinator(
+            Args {
+                output: crate::cli::OutputType::Simple,
+                remote: "".to_string(),
+                branches: vec![],
+                pretty: crate::cli::BooleanCLI::False,
+                recent: 0,
+            },
+            &mut buf,
+            &mock_analyzer,
+            &mock_repo,
+        )?;
+
+        // // check if output is text table with two analysis results
+        let text = String::from_utf8(buf).unwrap();
+        let expected = r#"
+feature -> master : ✅✅ No changes: already up-to-date.
+master -> feature : 🚀✅ No confilcts: fast-forward merge is possible.
+"#
+        .trim_start();
+
+        assert_eq!(text, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_run_probranchinator_json() -> Result<(), Box<dyn std::error::Error>> {
+        let mut buf = Vec::new();
+        let mock_analyzer = two_branches_analyzer();
+        let mock_repo = this_repository();
+
+        // // call run_probranchinator with mocks and buffer
         run_probranchinator(
             Args {
                 output: crate::cli::OutputType::Json,
@@ -449,7 +533,7 @@ mod tests {
             &mock_repo,
         )?;
 
-        // // check if output is valid json with empty array
+        // // check if output is valid json with array of two elements
         let json = String::from_utf8(buf).unwrap();
         let parsed: serde_json::Value = serde_json::from_str(&json).unwrap();
         let expected = json!([
@@ -468,5 +552,36 @@ mod tests {
         assert_eq!(parsed, expected);
 
         Ok(())
+    }
+
+    fn this_repository() -> MockRepo {
+        let mut mock_repo = MockRepo::new();
+        mock_repo.expect_get_repo().returning(|_| {
+            Ok((
+                git2::Repository::open_from_env().unwrap(),
+                "master".to_string().into(),
+                false,
+            ))
+        });
+        mock_repo
+    }
+
+    fn two_branches_analyzer() -> MockAnalyzer {
+        let mut mock_analyzer = MockAnalyzer::new();
+        mock_analyzer.expect_analyse().returning(|_, _, _| {
+            Ok(vec![
+                MergeAnalysisResult {
+                    status: MergeAnalysisStatus::UpToDate,
+                    from_branch: "feature".to_string(),
+                    to_branch: "master".to_string(),
+                },
+                MergeAnalysisResult {
+                    status: MergeAnalysisStatus::FastForward,
+                    from_branch: "master".to_string(),
+                    to_branch: "feature".to_string(),
+                },
+            ])
+        });
+        mock_analyzer
     }
 }
