@@ -5,8 +5,8 @@ use std::hash::{Hash, Hasher};
 use std::path::PathBuf;
 use std::{env, fs};
 
-use crate::app::Repo;
 use crate::clone::clone_repo;
+use crate::interactive::Repo;
 use crate::Probranchinator;
 
 impl Repo for Probranchinator {

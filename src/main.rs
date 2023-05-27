@@ -1,7 +1,8 @@
 mod analysis;
-mod app;
 mod cli;
 mod clone;
+mod interactive;
+mod probranchinator;
 mod recent;
 mod repo;
 mod result;
@@ -12,7 +13,7 @@ fn main() -> eyre::Result<()> {
     env_logger::init();
     let args = cli::Args::parse();
     let probranchinator = Probranchinator {};
-    return app::run_probranchinator(
+    return probranchinator::run_probranchinator(
         args,
         &mut std::io::stdout(),
         &probranchinator,

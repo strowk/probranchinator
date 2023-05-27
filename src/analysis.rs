@@ -1,6 +1,7 @@
 use crate::{
     recent::get_recent_branches,
-    result::{MergeAnalysisResult, MergeAnalysisStatus}, Probranchinator,
+    result::{MergeAnalysisResult, MergeAnalysisStatus},
+    Probranchinator,
 };
 use eyre::Result;
 use git2::Repository;
@@ -8,7 +9,7 @@ use indicatif::ProgressStyle;
 
 use std::time::Duration;
 
-impl crate::app::Analyzer for Probranchinator {
+impl crate::interactive::Analyzer for Probranchinator {
     fn analyse(
         &self,
         repo: Repository,

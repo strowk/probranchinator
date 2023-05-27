@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{app::Repo, recent, tests::support};
+use crate::{interactive::Repo, recent, tests::support};
 
 #[test]
 fn test_recent() -> eyre::Result<()> {

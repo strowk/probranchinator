@@ -1,4 +1,4 @@
-use crate::app::{Analyzer as _, Repo};
+use crate::interactive::{Analyzer as _, Repo};
 use crate::result::MergeAnalysisStatus;
 use crate::tests::support::git::{
     assert_result, create_bare_repo, create_branch, create_branch_with_commit, create_commit,

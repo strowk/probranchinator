@@ -1,4 +1,4 @@
-use crate::app::Repo;
+use crate::interactive::Repo;
 use crate::tests::support::git::create_bare_repo;
 use std::env;
 use std::path::PathBuf;
