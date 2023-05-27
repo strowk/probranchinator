@@ -23,6 +23,7 @@ jobs:
       - run: git config --global user.name "Test Fella"
       - run: git config --global user.email "justfortest@domain.example"
       - run: cargo install cargo-make
+      - run: mkdir -p ./target
       - run: cargo make test-coverage
       - run: cargo make install-cross
       - run: cargo make build-linux_x86_64
